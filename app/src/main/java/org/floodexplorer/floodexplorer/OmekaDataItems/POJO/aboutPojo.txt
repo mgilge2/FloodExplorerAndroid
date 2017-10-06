@@ -1,0 +1,11 @@
+the classes here have to do with querying the google maps server for information
+
+Nearest is used to place pins on the map for the nearest items (pass a string) to the current
+selected pin (can be changed to user location easily)
+
+Route is used to draw routes and display time and distance from the users current location to that
+of the current selected pin
+
+More details about how these specifically work can be found here:
+
+https://www.androidtutorialpoint.com/intermediate/google-maps-nearby-places-api-using-retrofit-android/
