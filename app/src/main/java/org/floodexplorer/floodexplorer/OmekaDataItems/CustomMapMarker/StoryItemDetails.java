@@ -1,10 +1,12 @@
 package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker;
 
+import java.io.Serializable;
+
 /**
  * Created by mgilge on 10/5/17.
  */
 
-public class StoryItemDetails
+public class StoryItemDetails implements Serializable
 {
     private String fileName;
     private String fileTitle;

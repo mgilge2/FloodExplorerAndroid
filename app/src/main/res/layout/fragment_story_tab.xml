@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="org.floodexplorer.floodexplorer.Activities.MainActivity">
 
     <TabHost
         android:id="@+id/tabHost"
@@ -42,9 +42,17 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/tab1Txt"
+                                android:id="@+id/storyTitleTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
+                                android:layout_height="wrap_content"
+                                android:paddingTop="10dp"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                            <TextView
+                                android:id="@+id/storyBodyTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="10dp" />
                         </LinearLayout>
                     </ScrollView>
 
@@ -70,6 +78,10 @@
                             android:gravity="center"
                             android:horizontalSpacing="10dp"
                             android:numColumns="auto_fit"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="10dp"
                             android:stretchMode="columnWidth"
                             android:verticalSpacing="10dp" />
                     </LinearLayout>

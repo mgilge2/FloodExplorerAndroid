@@ -10,14 +10,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.LruCache;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.floodexplorer.floodexplorer.Activities.MainActivity;
 import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabActivity;
@@ -31,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.okhttp.ResponseBody;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,9 +59,9 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
 {
     private TextView storyLabel;
     private ImageView mImageView;
-    private GoogleMap mMap;
     private LruCache<String, Bitmap> mMemoryCache;
     private Context context;
+    private ListView listView;
 
 
 
@@ -78,19 +83,56 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
         this.setupMemoryCache();
         storyLabel = (TextView) convertView.findViewById(R.id.storyLblTxt);
         storyLabel.setText(marker.getTitle());
-
         mImageView = (ImageView) convertView.findViewById(R.id.imageButton);
         mImageView.setTag(position);
 
-        //String url = "http://floodexplorer.com/rockhammer.png";
-       // String url = "http://floodexplorer.com/curatescape/files/fullsize/4e7bbd22388d2a84bb1eed6a4588bc33.jpg";
-          String url = marker.getStoryImgageUrl();
-
-       this.loadBitmap(position, mImageView,url);
-
-         this.setButtonListener();
-
+        String url = marker.getStoryImgageUrl();
+        this.loadBitmapPicasso(position, mImageView,url);
+        this.setButtonListener();
         return convertView;
+    }
+
+    //Private implementation below here....
+
+    private void loadBitmapPicasso(int resId, ImageView imageView, String url)
+    {
+        final String imageKey = String.valueOf(resId);
+
+        final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+        if (bitmap != null)
+        {
+            mImageView.setImageBitmap(bitmap);
+        }
+        else
+        {
+            mImageView.setImageResource(R.drawable.rockhammer);
+            try
+            {
+
+               // new DownloadImageTask(mImageView).execute(url);
+                Picasso.with(getContext()).load(url).into(mImageView);
+
+                //    this.getRetrofitImage(url); buggy!!
+            }
+            catch (Exception e)
+            {
+                e.getStackTrace();
+            }
+
+
+        }
+    }
+
+    private void addBitmapToMemoryCache(String key, Bitmap bitmap)
+    {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    private Bitmap getBitmapFromMemCache(String key)
+    {
+        return mMemoryCache.get(key);
     }
 
     private void setupMemoryCache()
@@ -110,6 +152,38 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             }
         };
     }
+
+    private void setButtonListener()
+    {
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                int position = (Integer) view.getTag();
+                // Access the row position here to get the correct data item
+                CustomMapMarker customMapMarker = getItem(position);
+
+                // Do what you want here...
+                /*
+                Toast.makeText(MainActivity.getInstance().getApplicationContext(),
+                        customMapMarker.getSnippet(), Toast.LENGTH_LONG).show();
+                        */
+                /*
+                FragmentManager fm = MainActivity.getInstance().getSupportFragmentManager();
+                DisplayStory dialogFragment = new DisplayStory(customMapMarker.getStoryText(), mImageView);
+                dialogFragment.show(fm, "Sample Fragment");
+*/
+
+                Fragment fragment = StoryTabActivity.newInstance(customMapMarker);
+                FragmentManager fm =  ((AppCompatActivity)context).getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.frameLayout, fragment);
+                ft.commit();
+            }
+        });
+    }
+
+    //Below has been deprecated by picasso call.... Will remove before release!
 
     public void loadBitmap(int resId, ImageView imageView, String url)
     {
@@ -135,71 +209,6 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             {
                 e.getStackTrace();
             }
-
-
-        }
-    }
-
-    public void addBitmapToMemoryCache(String key, Bitmap bitmap)
-    {
-        if (getBitmapFromMemCache(key) == null) {
-            mMemoryCache.put(key, bitmap);
-        }
-    }
-
-    public Bitmap getBitmapFromMemCache(String key)
-    {
-        return mMemoryCache.get(key);
-    }
-
-    private void setButtonListener()
-    {
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                int position = (Integer) view.getTag();
-                // Access the row position here to get the correct data item
-                CustomMapMarker customMapMarker = getItem(position);
-
-                // Do what you want here...
-                /*
-                Toast.makeText(MainActivity.getInstance().getApplicationContext(),
-                        customMapMarker.getSnippet(), Toast.LENGTH_LONG).show();
-                        */
-                /*
-                FragmentManager fm = MainActivity.getInstance().getSupportFragmentManager();
-                DisplayStory dialogFragment = new DisplayStory(customMapMarker.getStoryText(), mImageView);
-                dialogFragment.show(fm, "Sample Fragment");
-*/
-
-                Fragment fragment = new StoryTabActivity(customMapMarker);
-                FragmentManager fm =  ((AppCompatActivity)context).getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.fragmentFrame, fragment);
-                ft.commit();
-            }
-        });
-    }
-
-    public void setmMap(GoogleMap mMap)
-    {
-        this.mMap = mMap;
-    }
-
-    public Bitmap getBitmapFromURL(String src)
-    {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -236,125 +245,7 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
         {
             mHeaderPicture.setImageBitmap(result); //Bitmap.createScaledBitmap(result, 100, 100, false)  setImageBitmap(result)
             addBitmapToMemoryCache(String.valueOf(url), result);
-
-
-            /*
-            lots of ways to set the scaling on an image, this is not the best approach
-            https://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
-            for more info
-
-            resizing is causing a crash probably due to url and delay in loading we should try to just convert the images during the query phase to actual images if possible
-            and see what the hit is in performance (it isnt good as is)
-
-            https://www.androidtutorialpoint.com/networking/android-retrofit-2-0-tutorial-retrofit-android-example-download-image-url-display-android-device-screen/
-
-            is likely a good solution as that site has proven to be very useful
-             */
         }
 
     };
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight
-    ) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
-        return resizedBitmap;
-    }
-
-    //this is trial of stuff located at https://www.androidtutorialpoint.com/networking/android-retrofit-2-0-tutorial-retrofit-android-example-download-image-url-display-android-device-screen/
-
-    void getRetrofitImage(String url)
-    {
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitImageAPI service = retrofit.create(RetrofitImageAPI.class);
-
-        Call<ResponseBody> call = service.getImageDetails();
-
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
-
-                try {
-
-                    Log.d("onResponse", "Response came from server");
-
-                    boolean FileDownloaded = DownloadImage(response.body());
-
-                    Log.d("onResponse", "Image is downloaded and saved ? " + FileDownloaded);
-
-                } catch (Exception e) {
-                    Log.d("onResponse", "There is an error");
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-        });
-    }
-
-    private boolean DownloadImage(ResponseBody body) {
-
-        try {
-            Log.d("DownloadImage", "Reading and writing file");
-            InputStream in = null;
-            FileOutputStream out = null;
-
-            try {
-                in = body.byteStream();
-                out = new FileOutputStream(getContext().getExternalFilesDir(null) + File.separator + "AndroidTutorialPoint.jpg");
-                int c;
-
-                while ((c = in.read()) != -1) {
-                    out.write(c);
-                }
-            }
-            catch (IOException e) {
-                Log.d("DownloadImage",e.toString());
-                return false;
-            }
-            finally {
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-            }
-
-            int width, height;
-            ImageView image = (ImageView) mImageView.findViewById(R.id.imageButton);
-            Bitmap bMap = BitmapFactory.decodeFile(getContext().getExternalFilesDir(null) + File.separator + "AndroidTutorialPoint.jpg");
-            width = 2*bMap.getWidth();
-            height = 6*bMap.getHeight();
-            Bitmap bMap2 = Bitmap.createScaledBitmap(bMap, width, height, false);
-            image.setImageBitmap(bMap2);
-
-            return true;
-
-        } catch (IOException e) {
-            Log.d("DownloadImage",e.toString());
-            return false;
-        }
-    }
-
 }

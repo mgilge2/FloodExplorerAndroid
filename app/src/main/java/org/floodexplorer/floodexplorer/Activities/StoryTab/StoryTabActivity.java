@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -40,7 +41,8 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
     private ClusterManager<CustomMapMarker> mClusterManager;
     private CustomMapMarker mapMarker;
     private TabHost host;
-    private TextView text1;
+    private TextView storyText;
+    private TextView storyTitle;
     private GridView gridView;
     private ArrayList<StoryItemDetails> storyItemDetailes;
     private GoogleMap googleMap;
@@ -50,18 +52,28 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+        this.readArgumentsBundle(getArguments());
         View view = inflater.inflate(R.layout.fragment_story_tab, container, false);
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
+        setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
 
 
-    public StoryTabActivity(CustomMapMarker marker)
+    public StoryTabActivity()
     {
-        this.mapMarker = marker;
+        //this.mapMarker = marker;
+    } //need to do arguments.setBundle
+
+    public static StoryTabActivity newInstance(CustomMapMarker marker)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("customMarker", marker);
+
+        StoryTabActivity storyTabActivity = new StoryTabActivity();
+        storyTabActivity.setArguments(bundle);
+        return storyTabActivity;
     }
 
     @Override
@@ -69,10 +81,11 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
     {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Menu 1");
+        getActivity().setTitle(mapMarker.getTitle());
 
         this.host = (TabHost) view.findViewById(R.id.tabHost);
-        this.text1 = (TextView) view.findViewById(R.id.tab1Txt);
+        this.storyText = (TextView) view.findViewById(R.id.storyBodyTxt);
+        this.storyTitle = (TextView) view.findViewById(R.id.storyTitleTxt);
         this.gridView = (GridView) view.findViewById(R.id.gridview);
 
         this.initTabHost();
@@ -87,6 +100,14 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
 
     //Private Implementation....
 
+    private void readArgumentsBundle(Bundle bundle)
+    {
+        if(bundle != null)
+        {
+            this.mapMarker = bundle.getParcelable("customMarker");
+        }
+    }
+
     private void initTabHost()
     {
         host.setup();
@@ -95,7 +116,8 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
         TabHost.TabSpec spec = host.newTabSpec("Tab One");
         spec.setContent(R.id.tab1);
         spec.setIndicator("Story");
-        this.text1.setText(this.mapMarker.getStoryText());
+        this.storyText.setText(this.mapMarker.getStoryText());
+        this.storyTitle.setText(this.mapMarker.getTitle());
         host.addTab(spec);
 
         //Tab 2

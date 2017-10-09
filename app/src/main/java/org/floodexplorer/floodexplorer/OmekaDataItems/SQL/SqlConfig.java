@@ -13,6 +13,7 @@ public class SqlConfig
     public static final String URL_ADD="http://www.floodexplorer.com/addEmp.php";
     public static final String URL_GET_LOCATIONS = "http://www.floodexplorer.com/getAllLocations.php";
     public static final String URL_GET_STORYITEMS = "http://www.floodexplorer.com/getAllStoryItems.php";
+    public static final String URL_GET_HOMEITEMS = "http://www.floodexplorer.com/getAboutPage.php";
     public static final String URL_UPDATE_EMP = "http://www.floodexplorer.com/updateEmp.php";
     public static final String URL_DELETE_EMP = "http://www.floodexplorer.com/deleteEmp.php?id=";
 
@@ -35,6 +36,9 @@ public class SqlConfig
     public static final String TAG_FILE = "file";
     public static final String TAG_ITEM_TITLE = "title";
     public static final String TAG_CAPTION = "caption";
+
+    //JSON Tags for Home Items query
+    public static final String TAG_ABOUT="about";
 
 
 }

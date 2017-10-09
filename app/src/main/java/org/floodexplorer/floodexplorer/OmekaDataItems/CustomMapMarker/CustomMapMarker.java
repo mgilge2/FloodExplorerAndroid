@@ -1,5 +1,9 @@
 package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,10 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.ClusterItem;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabActivity;
 import org.floodexplorer.floodexplorer.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +28,7 @@ import java.util.ArrayList;
  * with a sepcific item within this class
  */
 
-public class CustomMapMarker implements ClusterItem
+public class CustomMapMarker implements ClusterItem, Parcelable
 {
     private LatLng mPosition;
     private String mTitle;
@@ -58,6 +65,17 @@ public class CustomMapMarker implements ClusterItem
         this.zoom = zoom;
         this.fileList = new ArrayList<StoryItemDetails>();
         this.id = id;
+    }
+
+    public CustomMapMarker(Parcel parcel)
+    {
+        LatLng latLng = new LatLng(parcel.readDouble(), parcel.readDouble());
+        this.mTitle = parcel.readString();
+        this.mSnippet = parcel.readString();
+        this.storyText = parcel.readString();
+        this.zoom = parcel.readDouble();
+        this.fileList = parcel.readArrayList(ClassLoader.getSystemClassLoader());
+        this.id = parcel.readInt();
     }
 
     public void addFileToMarker(StoryItemDetails storyItem)
@@ -116,6 +134,22 @@ public class CustomMapMarker implements ClusterItem
         return this.fileList;
     }
 
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
 
-
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeDouble(mPosition.longitude);
+        dest.writeDouble(mPosition.latitude);
+        dest.writeString(mTitle);
+        dest.writeString(mSnippet);
+        dest.writeString(storyText);
+        dest.writeDouble(zoom);
+        dest.writeList(fileList);
+        dest.writeInt(id);
+    }
 }

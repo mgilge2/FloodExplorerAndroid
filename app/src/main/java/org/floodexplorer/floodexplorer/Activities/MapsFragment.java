@@ -4,10 +4,10 @@ package org.floodexplorer.floodexplorer.Activities;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +24,6 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.MarkerManager;
@@ -36,7 +34,6 @@ import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabActivity;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.PinInfoViewAdapter;
-import org.floodexplorer.floodexplorer.OmekaDataItems.OmekaDataItems;
 import org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route.RouteExample;
 import org.floodexplorer.floodexplorer.R;
 import org.floodexplorer.floodexplorer.RetrofitMapsRoute;
@@ -57,7 +54,7 @@ import retrofit.Retrofit;
 public class MapsFragment extends Fragment implements OnMapReadyCallback
 {
     private GoogleMap googleMap;
-    private OmekaDataItems<CustomMapMarker> omekaDataItems;
+    private ArrayList<CustomMapMarker> omekaDataItems;
     private ClusterManager<CustomMapMarker> mClusterManager;
     private Marker prevMarker;
     private Button changeButton;
@@ -68,17 +65,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     private Polyline line;
     private TextView ShowDistanceDuration;
 
-    public MapsFragment()
+    public static MapsFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
     {
-        // Required empty public constructor
-    }
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("omekaDataList", omekaDataItems);
 
+        MapsFragment mapsFragment = new MapsFragment();
+        mapsFragment.setArguments(bundle);
+        return mapsFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        readArgumentsBundle(getArguments());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        this.setNavigationTitle();
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
         this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
@@ -103,6 +106,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                 //mapLogic.buildRoute("walking");
             }
         });
+        setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
 
@@ -113,12 +117,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         this.initMap();
     }
 
-    public void setOmekaDataItems(OmekaDataItems omekaDataItems)
+    //private implentation
+
+    private void readArgumentsBundle(Bundle bundle)
     {
-        this.omekaDataItems = omekaDataItems;
+        if(bundle != null)
+        {
+            this.omekaDataItems = bundle.getParcelableArrayList("omekaDataList");
+        }
     }
 
-    //private implentation
+    private void setNavigationTitle()
+    {
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        View view = actionBar.getCustomView();
+        TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
+        textView.setText("Map");
+    }
+
 
     private void initMap()
     {
@@ -241,10 +257,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
             {
 
                 CustomMapMarker mapMarker = findMapMarker(marker);
-                Fragment fragment = new StoryTabActivity(mapMarker);
+                Fragment fragment = StoryTabActivity.newInstance(mapMarker);
                 FragmentManager fm =  getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.fragmentFrame, fragment);
+                ft.replace(R.id.frameLayout, fragment);
                 ft.commit();
             }
         });

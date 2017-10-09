@@ -1,11 +1,8 @@
 package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,16 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.floodexplorer.floodexplorer.OmekaDataItems.OmekaDataItems;
 import org.floodexplorer.floodexplorer.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
-import java.net.URL;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Created by mgilge on 7/21/17.
@@ -31,13 +25,10 @@ import java.util.HashMap;
 public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
 {
     private final LayoutInflater mInflater;
-    private OmekaDataItems<CustomMapMarker> omekaDataItems;
+    private ArrayList<CustomMapMarker> omekaDataItems;
     private ImageView mImageView;
+    private ImageView markerImageView;
     private Context mContext;
-    private  ImageView imageView;
-    private HashMap<String, Uri> images=null;
-    private int iconWidth = -1;
-    private int iconHeight = -1;
 
     public PinInfoViewAdapter(LayoutInflater inflater)
     {
@@ -45,7 +36,7 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
         this.mContext = inflater.getContext();
     }
 
-    public PinInfoViewAdapter(LayoutInflater inflater, OmekaDataItems<CustomMapMarker> omekaDataItems)
+    public PinInfoViewAdapter(LayoutInflater inflater, ArrayList<CustomMapMarker> omekaDataItems)
     {
         this.mInflater = inflater;
         this.omekaDataItems = omekaDataItems;
@@ -55,44 +46,29 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
     @Override
     public View getInfoWindow(Marker marker)
     {
-        final View popup = mInflater.inflate(R.layout.pin_info_layout, null);
+        View popup = mInflater.inflate(R.layout.pin_info_layout, null);
+        ImageView imageView = popup.findViewById(R.id.pinImageView);
+        ((TextView) popup.findViewById(R.id.title)).setText(marker.getTitle());
         if(omekaDataItems != null)
         {
-            imageView = new ImageView(mContext);
-            mImageView = (ImageView) popup.findViewById(R.id.pinImageView);
-
             CustomMapMarker customMarker = findMapMarker(marker);
-           //
-            // String url = customMarker.getStoryImgageUrl();
-            String img_url = customMarker.getStoryImgageUrl();
-            if (!img_url.equalsIgnoreCase(""))
-                Picasso.with(mContext).load(img_url)
-                        .placeholder(R.drawable.rockhammer)// Place holder image from drawable folder
-                        .into(mImageView, new MarkerCallback(marker));
-            /*
-        //    Uri image = new
-
-            Picasso.with(mContext).load(url).resize(iconWidth, iconHeight)
-                    .centerCrop().noFade()
-                    .placeholder(R.drawable.rockhammer)
-                    .into(mImageView, new MarkerCallback(marker));
-            //this.loadBitmap(0, imageView, url);
-          //  mImageView.setImageDrawable(imageView.getDrawable());
-            //mImageView.setImageResource(R.drawable.logomenu);
-            */
+            String url = customMarker.getStoryImgageUrl();
+            Picasso.with(popup.getContext()).load(url)
+                  //  .fit()
+                //    .centerCrop()
+                  //  .placeholder(R.drawable.rockhammer)
+                  //  .transform(new RoundedCornersTransformation(12, 0, RoundedCornersTransformation.CornerType.TOP))
+                    .into(imageView, new CustomMarkerCallback(marker));
         }
 
       //  Drawable drawable =   //getResources().getDrawable(<insert your id here>);
-        ((TextView) popup.findViewById(R.id.title)).setText(marker.getTitle());
         return popup;
     }
 
     @Override
     public View getInfoContents(Marker marker)
     {
-        final View popup = mInflater.inflate(R.layout.pin_info_layout, null);
-        ((TextView) popup.findViewById(R.id.title)).setText(marker.getTitle());
-        return popup;
+       return null;
     }
 
     //Private implementation...
@@ -111,7 +87,7 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
         return retMarker;
     }
 
-    public void loadBitmap(int resId, ImageView imageView, String url)
+    public void loadBitmap(int resId, ImageView imageView, String url, Marker marker)
     {
         final String imageKey = String.valueOf(resId);
         final Bitmap bitmap;
@@ -119,7 +95,7 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
             try
             {
 
-                new DownloadImageTask(imageView)
+                new DownloadImageTask(imageView, marker)
                         .execute(url);
 
                 //    this.getRetrofitImage(url); buggy!!
@@ -136,84 +112,47 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
     {
         private String url;
         ImageView mHeaderPicture;
-        ProgressDialog loading;
+        Marker marker;
 
-        public DownloadImageTask(ImageView mHeaderPicture)
+        public DownloadImageTask(ImageView mHeaderPicture, Marker marker)
         {
-            this.mHeaderPicture= mHeaderPicture;
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            loading = ProgressDialog.show(mContext,"Fetching...","Wait...",false,false); //showActivity works in fragments, getContext not so much
+            this.mHeaderPicture = mHeaderPicture;
+            this.marker = marker;
         }
 
         protected Bitmap doInBackground(String... urls)
         {
             url = urls[0];
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try
-            {
-                InputStream in = new URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-                return mIcon11;
-            }
-            catch (Exception e)
-            {
+            Bitmap bitmap = null;
+            try {
+                InputStream in = new java.net.URL(url).openStream();
+                bitmap = BitmapFactory.decodeStream(in);
+                //bitmapList.add(mIcon11);
+                //  return mIcon11;
+            } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
+
             //    Bitmap returnBitmap = getResizedBitmap(mIcon11, 100, 100);
 
-            return mIcon11;
+            return bitmap;
         }
 
         protected void onPostExecute(Bitmap result)
         {
-            loading.dismiss();
-            imageView.setImageBitmap(result); //Bitmap.createScaledBitmap(result, 100, 100, false)  setImageBitmap(result)
-
-
-            /*
-            lots of ways to set the scaling on an image, this is not the best approach
-            https://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
-            for more info
-
-            resizing is causing a crash probably due to url and delay in loading we should try to just convert the images during the query phase to actual images if possible
-            and see what the hit is in performance (it isnt good as is)
-
-            https://www.androidtutorialpoint.com/networking/android-retrofit-2-0-tutorial-retrofit-android-example-download-image-url-display-android-device-screen/
-
-            is likely a good solution as that site has proven to be very useful
-             */
+            if (result != null)
+            {
+                mHeaderPicture.setImageBitmap(result);
+            }
+            else
+            {
+                mHeaderPicture.setBackgroundResource(R.drawable.rockhammer);
+            }
+            marker.showInfoWindow();
         }
     };
 
-    static class MarkerCallback implements Callback
-    {
-        Marker marker=null;
 
-        MarkerCallback(Marker marker)
-        {
-            this.marker=marker;
-        }
 
-        @Override
-        public void onError()
-        {
-            Log.e(getClass().getSimpleName(), "Error loading thumbnail!");
-        }
-
-        @Override
-        public void onSuccess()
-        {
-            if (marker != null && marker.isInfoWindowShown())
-            {
-                marker.showInfoWindow();
-            }
-        }
-    }
 }
