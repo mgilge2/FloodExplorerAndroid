@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FloodExplorer.iml" filepath="$PROJECT_DIR$/FloodExplorer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FloodExplorerAndroid.iml" filepath="$PROJECT_DIR$/FloodExplorerAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

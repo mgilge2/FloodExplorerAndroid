@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         this.initBottomNavigationView();
         /*
         this.getLocations(); //perform db query...
-        this.getStoryItems();
+        this.getStoryItems(); //gets items from database
         this.getHomeData();
         this.initFragments()*/
         if(savedInstanceState == null)
