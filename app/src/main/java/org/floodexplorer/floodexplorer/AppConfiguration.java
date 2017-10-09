@@ -40,5 +40,10 @@ public class AppConfiguration
     //JSON Tags for Home Items query
     public static final String TAG_ABOUT="about";
 
+    //Details for layouts such as color for mav bars, images, etc.
+    public static final String BtmNavBarColor = "23B0FC"; //dodger blue color
+    public static final String BtmNavBarIconColor = "#FFFFFF"; //icon color white
+
+
 
 }
