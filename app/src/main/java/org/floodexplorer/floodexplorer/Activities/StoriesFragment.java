@@ -27,7 +27,6 @@ public class StoriesFragment extends Fragment
     private ListView storyListView;
     private ArrayList<CustomMapMarker> omekaDataItems;
 
-
     public static StoriesFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
     {
         Bundle bundle = new Bundle();
@@ -50,14 +49,10 @@ public class StoriesFragment extends Fragment
         return view;
     }
 
-    public void setOmekaDataItems(ArrayList<CustomMapMarker> omekaDataItems)
-    {
-      //  this.omekaDataItems = omekaDataItems;
-    }
-
-
-
-    //private implementation...
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void readArgumentsBundle(Bundle bundle)
     {

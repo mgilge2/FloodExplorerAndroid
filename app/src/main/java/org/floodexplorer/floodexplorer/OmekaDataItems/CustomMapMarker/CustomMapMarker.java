@@ -70,6 +70,7 @@ public class CustomMapMarker implements ClusterItem, Parcelable
     public CustomMapMarker(Parcel parcel)
     {
         LatLng latLng = new LatLng(parcel.readDouble(), parcel.readDouble());
+        this.mPosition = latLng;
         this.mTitle = parcel.readString();
         this.mSnippet = parcel.readString();
         this.storyText = parcel.readString();
@@ -77,6 +78,19 @@ public class CustomMapMarker implements ClusterItem, Parcelable
         this.fileList = parcel.readArrayList(ClassLoader.getSystemClassLoader());
         this.id = parcel.readInt();
     }
+
+    public static final Creator<CustomMapMarker> CREATOR = new Creator<CustomMapMarker>()
+    {
+        @Override
+        public CustomMapMarker createFromParcel(Parcel in) {
+            return new CustomMapMarker(in);
+        }
+
+        @Override
+        public CustomMapMarker[] newArray(int size) {
+            return new CustomMapMarker[size];
+        }
+    };
 
     public void addFileToMarker(StoryItemDetails storyItem)
     {
@@ -111,7 +125,6 @@ public class CustomMapMarker implements ClusterItem, Parcelable
 
     public String getStoryImgageUrl()
     {
-
         //todo move url string to config file
         if(fileList.size() != 0)
         {
@@ -121,8 +134,6 @@ public class CustomMapMarker implements ClusterItem, Parcelable
         {
             return "http://floodexplorer.com/rockhammer.png";
         }
-
-       // return "http://floodexplorer.com/rockhammer.png";
     }
 
     public int getId() {

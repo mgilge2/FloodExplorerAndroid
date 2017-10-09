@@ -77,7 +77,10 @@ public class PictureDialog extends DialogFragment
         return rootView;
     }
 
-    //Private implementation
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void readArgumentsBundle(Bundle bundle)
     {

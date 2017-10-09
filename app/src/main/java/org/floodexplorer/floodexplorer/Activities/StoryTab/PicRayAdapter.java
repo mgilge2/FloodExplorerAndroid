@@ -59,26 +59,9 @@ class PicRayAdapter extends ArrayAdapter<ImageView>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ImageView imageView;
-        /*
-        if (convertView == null)
-        {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setPadding(8, 8, 8, 8);
-        }
-        else
-        {
-            imageView = (ImageView) convertView;
-        }
-*/
-
-
         imageView = imageList.get(position);
         imageView.setLayoutParams(layoutParams);
         imageView.setPadding(25, 25, 25, 25);
-
 
         //imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
@@ -88,18 +71,10 @@ class PicRayAdapter extends ArrayAdapter<ImageView>
         return imageView;
     }
 
-    private ImageView blah(int position)
-    {
-        ImageView imageView = new ImageView(mContext);
-        ImageView imageToScale = imageList.get(position);
-        imageToScale.setDrawingCacheEnabled(true);
-        Bitmap bmap = imageToScale.getDrawingCache(true);
-
-        BitmapDrawable drawable = (BitmapDrawable) imageToScale.getDrawable();
-        imageView.setImageDrawable(drawable);
-        imageView.setTag(position);
-        return imageView;
-    }
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private View.OnClickListener onClickListenerGenerator()
     {
@@ -112,20 +87,9 @@ class PicRayAdapter extends ArrayAdapter<ImageView>
                 FragmentManager fm = ((AppCompatActivity)mContext).getSupportFragmentManager();
                 PictureDialog pictureDialog = PictureDialog.newInstance(imageView);
                 pictureDialog.show(fm, "Dialog Show");
-
-                //Toast.makeText(mContext,"mmahhahhahahahahahaha!!!", Toast.LENGTH_LONG).show();
             }
         };
         return onClickListener;
-    }
-
-    private void buildImageList() //need to handle data for images here...
-    {
-        for(StoryItemDetails storyItem: storyItemDetails)
-        {
-            String fileName = storyItem.getFileName();
-            new DownloadImageTask(storyItem).execute("http://floodexplorer.com/curatescape/files/square_thumbnails/" + fileName);
-        }
     }
 
     private void buildImageListPicasso() //need to handle data for images here...
@@ -142,62 +106,4 @@ class PicRayAdapter extends ArrayAdapter<ImageView>
             imageList.add(newImageView);
         }
     }
-
-    public void addHandlersToImages()
-    {
-        for(ImageView imageView: imageList)
-        {
-            imageView.setOnClickListener(picRayListener);
-        }
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        private String url;
-        ProgressDialog loading;
-        StoryItemDetails itemDetails;
-
-        public DownloadImageTask(StoryItemDetails itemDetails)
-        {
-            this.itemDetails = itemDetails;
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            loading = ProgressDialog.show(mContext, "Fetching...", "Wait...", false, false); //showActivity works in fragments, getContext not so much
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            url = urls[0];
-            Bitmap mIcon11 = null;
-            try
-            {
-                InputStream in = new java.net.URL(url).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-                //bitmapList.add(mIcon11);
-                //  return mIcon11;
-            }
-            catch (Exception e)
-            {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-
-
-            //    Bitmap returnBitmap = getResizedBitmap(mIcon11, 100, 100);
-
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            ImageView newImageView = new ImageView(mContext);
-            newImageView.setImageBitmap(result);
-            newImageView.setTag(this.itemDetails);
-            imageList.add(newImageView);
-            loading.dismiss();
-
-
-        }
-    };
 }

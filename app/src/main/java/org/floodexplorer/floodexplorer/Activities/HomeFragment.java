@@ -13,9 +13,6 @@ import android.widget.TextView;
 import org.floodexplorer.floodexplorer.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment
 {
     private String aboutTxt;
@@ -42,7 +39,10 @@ public class HomeFragment extends Fragment
         return view;
     }
 
-    //Private Implementation
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void readArgumentsBundle(Bundle bundle)
     {

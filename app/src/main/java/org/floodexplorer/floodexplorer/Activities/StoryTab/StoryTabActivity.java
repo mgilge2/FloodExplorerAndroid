@@ -47,7 +47,6 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
     private ArrayList<StoryItemDetails> storyItemDetailes;
     private GoogleMap googleMap;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -59,12 +58,6 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
         setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
-
-
-    public StoryTabActivity()
-    {
-        //this.mapMarker = marker;
-    } //need to do arguments.setBundle
 
     public static StoryTabActivity newInstance(CustomMapMarker marker)
     {
@@ -98,7 +91,10 @@ public class StoryTabActivity extends Fragment implements OnMapReadyCallback
         this.initMap();
     }
 
-    //Private Implementation....
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void readArgumentsBundle(Bundle bundle)
     {

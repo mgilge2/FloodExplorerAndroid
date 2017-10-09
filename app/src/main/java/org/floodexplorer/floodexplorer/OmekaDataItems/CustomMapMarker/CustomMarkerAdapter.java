@@ -63,8 +63,6 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
     private Context context;
     private ListView listView;
 
-
-
     public CustomMarkerAdapter(Context context, ArrayList<CustomMapMarker> users)
     {
         super(context, 0, users);
@@ -92,7 +90,10 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
         return convertView;
     }
 
-    //Private implementation below here....
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void loadBitmapPicasso(int resId, ImageView imageView, String url)
     {
@@ -109,7 +110,7 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             try
             {
 
-               // new DownloadImageTask(mImageView).execute(url);
+                //new DownloadImageTask(mImageView).execute(url);
                 Picasso.with(getContext()).load(url).into(mImageView);
 
                 //    this.getRetrofitImage(url); buggy!!

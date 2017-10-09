@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.SQL;
+package org.floodexplorer.floodexplorer;
 
 /**
  * Created by mgilge on 7/19/17.
@@ -7,7 +7,7 @@ package org.floodexplorer.floodexplorer.OmekaDataItems.SQL;
  * Enum anyone say enum?
  */
 
-public class SqlConfig
+public class AppConfiguration
 {
     //Address of our scripts of queries to the Omeka database
     public static final String URL_ADD="http://www.floodexplorer.com/addEmp.php";

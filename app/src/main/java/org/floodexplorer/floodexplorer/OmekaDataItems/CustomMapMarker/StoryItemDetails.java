@@ -33,5 +33,4 @@ public class StoryItemDetails implements Serializable
     {
         return fileCaption;
     }
-
 }

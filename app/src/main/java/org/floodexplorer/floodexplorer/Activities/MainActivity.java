@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
-import org.floodexplorer.floodexplorer.OmekaDataItems.SQL.SqlConfig;
-import org.floodexplorer.floodexplorer.OmekaDataItems.SQL.SqlRequestHandler;
+import org.floodexplorer.floodexplorer.AppConfiguration;
+import org.floodexplorer.floodexplorer.SqlRequestHandler;
 import org.floodexplorer.floodexplorer.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
     private String queryResults;
     private String storyItemsQueryResults;
     private String homeQueryResults;
-    private ArrayList<CustomMapMarker> omekaDataItems;
+    private ArrayList<CustomMapMarker> omekaDataItems; //this is our model for MVC....
     private BottomNavigationView navigation;
 
     @Override
@@ -44,14 +44,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.customizeActionBar();
-        omekaDataItems = new ArrayList<CustomMapMarker>();
+        this.omekaDataItems = new ArrayList<CustomMapMarker>();
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
         this.initBottomNavigationView();
-        /*
-        this.getLocations(); //perform db query...
-        this.getStoryItems();
-        this.getHomeData();
-        this.initFragments()*/
         if(savedInstanceState == null)
         {
             this.getLocations(); //perform db query...
@@ -72,15 +67,12 @@ public class MainActivity extends AppCompatActivity
 
         outState.putInt("selectedNav", selected);
         outState.putParcelableArrayList("omekaDataList", omekaDataItems);
-
-        //outState.putString("someVarB", someVarB);
     }
 
-
-
-    //Private implementation......
-
-    //This method will customize the bar at the top of the screen
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void initBottomNavigationView()
     {
@@ -89,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    private void customizeActionBar()
+    private void customizeActionBar()     //This method will customize the bar at the top of the screen
     {
 
         ActionBar actionBar = getSupportActionBar();
@@ -109,7 +101,6 @@ public class MainActivity extends AppCompatActivity
 
         //can now use view to get at buttons, images and anything else we wish....
     }
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -175,7 +166,7 @@ public class MainActivity extends AppCompatActivity
             protected String doInBackground(Void... params)
             {
                 SqlRequestHandler rh = new SqlRequestHandler();
-                String s = rh.sendGetRequest(SqlConfig.URL_GET_LOCATIONS);
+                String s = rh.sendGetRequest(AppConfiguration.URL_GET_LOCATIONS);
                 return s;
             }
         }
@@ -189,17 +180,17 @@ public class MainActivity extends AppCompatActivity
         try
         {
             jsonObject = new JSONObject(queryResults);
-            JSONArray result = jsonObject.getJSONArray(SqlConfig.TAG_JSON_ARRAY);
+            JSONArray result = jsonObject.getJSONArray(AppConfiguration.TAG_JSON_ARRAY);
 
             for(int x = 0; x < result.length(); x ++)
             {
                 JSONObject jo = result.getJSONObject(x);
-                double latitude = jo.getDouble(SqlConfig.TAG_LAT);
-                double longitude = jo.getDouble(SqlConfig.TAG_LONG);
-                String title = this.dealWithEscapeChars(jo.getString(SqlConfig.TAG_TITLE));
-                String text = this.dealWithEscapeChars(jo.getString(SqlConfig.TAG_TEXT));
-                double zoom = jo.getInt(SqlConfig.TAG_ZOOM);
-                int id = jo.getInt(SqlConfig.TAG_ID);
+                double latitude = jo.getDouble(AppConfiguration.TAG_LAT);
+                double longitude = jo.getDouble(AppConfiguration.TAG_LONG);
+                String title = this.dealWithEscapeChars(jo.getString(AppConfiguration.TAG_TITLE));
+                String text = this.dealWithEscapeChars(jo.getString(AppConfiguration.TAG_TEXT));
+                double zoom = jo.getInt(AppConfiguration.TAG_ZOOM);
+                int id = jo.getInt(AppConfiguration.TAG_ID);
                 CustomMapMarker addMarker = new CustomMapMarker(latitude, longitude, title, "", zoom, text, id);
                 this.omekaDataItems.add(addMarker);
             }
@@ -216,15 +207,15 @@ public class MainActivity extends AppCompatActivity
         try
         {
             jsonObject = new JSONObject(storyItemsQueryResults);
-            JSONArray result = jsonObject.getJSONArray(SqlConfig.TAG_JSON_ARRAY);
+            JSONArray result = jsonObject.getJSONArray(AppConfiguration.TAG_JSON_ARRAY);
 
             for(int x = 0; x < result.length(); x ++)
             {
                 JSONObject jo = result.getJSONObject(x);
-                int id = jo.getInt(SqlConfig.TAG_ID);
-                String fileName = jo.getString(SqlConfig.TAG_FILE).replace("\"","");;
-                String title = jo.getString(SqlConfig.TAG_ITEM_TITLE);
-                String caption = jo.getString(SqlConfig.TAG_CAPTION);
+                int id = jo.getInt(AppConfiguration.TAG_ID);
+                String fileName = jo.getString(AppConfiguration.TAG_FILE).replace("\"","");;
+                String title = jo.getString(AppConfiguration.TAG_ITEM_TITLE);
+                String caption = jo.getString(AppConfiguration.TAG_CAPTION);
                 StoryItemDetails storyItemDetails = new StoryItemDetails(fileName, title, caption);
                 ArrayList<CustomMapMarker> mapMarkers = omekaDataItems;
                 for(CustomMapMarker marker: omekaDataItems)
@@ -269,7 +260,7 @@ public class MainActivity extends AppCompatActivity
             protected String doInBackground(Void... params)
             {
                 SqlRequestHandler rh = new SqlRequestHandler();
-                String s = rh.sendGetRequest(SqlConfig.URL_GET_STORYITEMS);
+                String s = rh.sendGetRequest(AppConfiguration.URL_GET_STORYITEMS);
                 return s;
             }
         }
@@ -303,7 +294,7 @@ public class MainActivity extends AppCompatActivity
             protected String doInBackground(Void... params)
             {
                 SqlRequestHandler rh = new SqlRequestHandler();
-                String s = rh.sendGetRequest(SqlConfig.URL_GET_HOMEITEMS);
+                String s = rh.sendGetRequest(AppConfiguration.URL_GET_HOMEITEMS);
                 return s;
             }
         }
@@ -317,12 +308,12 @@ public class MainActivity extends AppCompatActivity
         try
         {
             jsonObject = new JSONObject(homeQueryResults);
-            JSONArray result = jsonObject.getJSONArray(SqlConfig.TAG_JSON_ARRAY);
+            JSONArray result = jsonObject.getJSONArray(AppConfiguration.TAG_JSON_ARRAY);
 
             for(int x = 0; x < result.length(); x ++)
             {
                 JSONObject jo = result.getJSONObject(x);
-                this.homeQueryResults = jo.getString(SqlConfig.TAG_ABOUT).replace("\"","");;
+                this.homeQueryResults = jo.getString(AppConfiguration.TAG_ABOUT).replace("\"","");;
             }
         }
         catch(JSONException e)
@@ -338,8 +329,6 @@ public class MainActivity extends AppCompatActivity
                 .replace("\"","") //the replace removed the "" around the title as returned by json
                 .replaceAll("(\\\\r)?\\\\n", System.getProperty("line.separator"))
                 .replace("\\t",  ""); //deal with tab
-
         return retString;
     }
-
 }

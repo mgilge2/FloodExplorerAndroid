@@ -58,6 +58,7 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
                 //    .centerCrop()
                   //  .placeholder(R.drawable.rockhammer)
                   //  .transform(new RoundedCornersTransformation(12, 0, RoundedCornersTransformation.CornerType.TOP))
+                    .error(R.drawable.rockhammer)
                     .into(imageView, new CustomMarkerCallback(marker));
         }
 
@@ -71,7 +72,10 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
        return null;
     }
 
-    //Private implementation...
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private CustomMapMarker findMapMarker(Marker marker)
     {
@@ -86,73 +90,4 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
         }
         return retMarker;
     }
-
-    public void loadBitmap(int resId, ImageView imageView, String url, Marker marker)
-    {
-        final String imageKey = String.valueOf(resId);
-        final Bitmap bitmap;
-     //   imageView.setImageResource(R.drawable.rockhammer);
-            try
-            {
-
-                new DownloadImageTask(imageView, marker)
-                        .execute(url);
-
-                //    this.getRetrofitImage(url); buggy!!
-            }
-            catch (Exception e)
-            {
-                e.getStackTrace();
-            }
-
-
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap>
-    {
-        private String url;
-        ImageView mHeaderPicture;
-        Marker marker;
-
-        public DownloadImageTask(ImageView mHeaderPicture, Marker marker)
-        {
-            this.mHeaderPicture = mHeaderPicture;
-            this.marker = marker;
-        }
-
-        protected Bitmap doInBackground(String... urls)
-        {
-            url = urls[0];
-            Bitmap bitmap = null;
-            try {
-                InputStream in = new java.net.URL(url).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-                //bitmapList.add(mIcon11);
-                //  return mIcon11;
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-
-            //    Bitmap returnBitmap = getResizedBitmap(mIcon11, 100, 100);
-
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap result)
-        {
-            if (result != null)
-            {
-                mHeaderPicture.setImageBitmap(result);
-            }
-            else
-            {
-                mHeaderPicture.setBackgroundResource(R.drawable.rockhammer);
-            }
-            marker.showInfoWindow();
-        }
-    };
-
-
-
 }

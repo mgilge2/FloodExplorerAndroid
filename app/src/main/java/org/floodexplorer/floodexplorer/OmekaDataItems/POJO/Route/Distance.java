@@ -3,7 +3,8 @@ package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Distance {
+public class Distance
+{
 
     @SerializedName("text")
     @Expose

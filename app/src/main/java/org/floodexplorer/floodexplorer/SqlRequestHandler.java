@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.SQL;
+package org.floodexplorer.floodexplorer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,7 +19,8 @@ import javax.net.ssl.HttpsURLConnection;
  * queries are located in mainactivity, do not change stuff here unless absolutely needed
  */
 
-public class SqlRequestHandler {
+public class SqlRequestHandler
+{
 
     //Method to send httpPostRequest
     //This method is taking two arguments

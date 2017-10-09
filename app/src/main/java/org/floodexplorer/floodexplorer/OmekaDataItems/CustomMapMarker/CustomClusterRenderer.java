@@ -37,7 +37,6 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMapMarke
         return Color.GREEN; // Return any color you want here. You can base it on clusterSize.
     }
 
-
     @Override
     protected void onBeforeClusterItemRendered(CustomMapMarker item, MarkerOptions markerOptions)
     {
@@ -52,7 +51,6 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMapMarke
 
 
     }
-
 
     @Override
     protected void onBeforeClusterRendered(Cluster<CustomMapMarker> cluster, MarkerOptions markerOptions)

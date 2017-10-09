@@ -33,7 +33,11 @@ public class AboutFragment extends Fragment
         return view;
     }
 
-    //Private implementation
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
+
     private void setNavigationTitle()
     {
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
