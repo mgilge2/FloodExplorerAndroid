@@ -1,8 +1,6 @@
 package org.floodexplorer.floodexplorer.Activities;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +16,7 @@ import android.widget.TextView;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.AppConfiguration;
-import org.floodexplorer.floodexplorer.SqlRequestHandler;
+import org.floodexplorer.floodexplorer.OmekaDataItems.SqlRequestHandler;
 import org.floodexplorer.floodexplorer.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initBottomNavigationView()
     {
-        navigation.setBackground(new ColorDrawable(Color.parseColor("#176130")));
+        navigation.setBackground(AppConfiguration.BtmNavBarColor);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -91,8 +89,7 @@ public class MainActivity extends AppCompatActivity
        // actionBar.setBackgroundDrawable(background);
 
         //here we can set the color
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#176130")));
-
+        actionBar.setBackgroundDrawable(AppConfiguration.ActionBarColor);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.custom_action_bar_layout); //use custom XML layout for ActionBar

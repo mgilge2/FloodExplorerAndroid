@@ -36,7 +36,7 @@ import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapM
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.PinInfoViewAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route.RouteExample;
 import org.floodexplorer.floodexplorer.R;
-import org.floodexplorer.floodexplorer.RetrofitMapsRoute;
+import org.floodexplorer.floodexplorer.OmekaDataItems.RetrofitMapsRoute;
 
 import java.util.ArrayList;
 import java.util.List;

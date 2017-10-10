@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer;
+package org.floodexplorer.floodexplorer.OmekaDataItems;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

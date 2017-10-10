@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer;
+package org.floodexplorer.floodexplorer.OmekaDataItems;
 
 /**
  * Created by mgilge on 7/17/17.
