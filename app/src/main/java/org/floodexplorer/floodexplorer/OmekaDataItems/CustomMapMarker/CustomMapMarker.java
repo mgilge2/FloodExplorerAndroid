@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+import org.floodexplorer.floodexplorer.AppConfiguration;
+
 import java.util.ArrayList;
 
 /**
@@ -115,11 +117,11 @@ public class CustomMapMarker implements ClusterItem, Parcelable
         //todo move url string to config file
         if(fileList.size() != 0)
         {
-            return "http://floodexplorer.com/curatescape/files/square_thumbnails/" + fileList.get(0).getFileName();
+            return AppConfiguration.URL_IMAGES_SQUARE_THUMBNAILS + fileList.get(0).getFileName();
         }
         else
         {
-            return "http://floodexplorer.com/rockhammer.png";
+            return AppConfiguration.URL_DEFAULT_IMAGE;
         }
     }
 

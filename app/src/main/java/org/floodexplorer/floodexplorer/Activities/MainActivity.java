@@ -9,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
@@ -28,7 +30,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
 {
 
-    private TextView mTextMessage;
     private String queryResults;
     private String storyItemsQueryResults;
     private String homeQueryResults;
@@ -53,7 +54,8 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            this.omekaDataItems = savedInstanceState.getParcelableArrayList("omekaDataList");
+            this.omekaDataItems = savedInstanceState.getParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
+            this.homeQueryResults = savedInstanceState.getString(AppConfiguration.BUNDLE_TAG_HOME_RESULTS);
         }
     }
 
@@ -63,10 +65,37 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         int selected = navigation.getSelectedItemId();
 
-        outState.putInt("selectedNav", selected);
-        outState.putParcelableArrayList("omekaDataList", omekaDataItems);
+        outState.putInt(AppConfiguration.BUNDLE_TAG_NAVIGATION_LOCATION, selected);
+        outState.putParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS, omekaDataItems);
+        outState.putString(AppConfiguration.BUNDLE_TAG_HOME_RESULTS, homeQueryResults);
     }
 
+    // Menu...if we want it
+/*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        Fragment fragment = null;
+
+        if (id == R.id.aboutMenuItem)
+        {
+            Toast.makeText(this,
+                    "FloodExplorer.org Android App", Toast.LENGTH_LONG).show();
+            return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+*/
     //*******************************************************************
     //  Private Implementation Below Here....
     //
@@ -81,9 +110,7 @@ public class MainActivity extends AppCompatActivity
 
     private void customizeActionBar()     //This method will customize the bar at the top of the screen
     {
-
         ActionBar actionBar = getSupportActionBar();
-
         //this code will set an image as the background
         //BitmapDrawable background = new BitmapDrawable (BitmapFactory.decodeResource(getResources(), R.drawable.logomenu));
        // actionBar.setBackgroundDrawable(background);
@@ -93,9 +120,8 @@ public class MainActivity extends AppCompatActivity
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.custom_action_bar_layout); //use custom XML layout for ActionBar
-        actionBar.setDisplayShowTitleEnabled(true);
+       // actionBar.setDisplayShowTitleEnabled(true);
         View view = getSupportActionBar().getCustomView();
-
         //can now use view to get at buttons, images and anything else we wish....
     }
 
@@ -310,7 +336,7 @@ public class MainActivity extends AppCompatActivity
             for(int x = 0; x < result.length(); x ++)
             {
                 JSONObject jo = result.getJSONObject(x);
-                this.homeQueryResults = jo.getString(AppConfiguration.TAG_ABOUT).replace("\"","");;
+                this.homeQueryResults = dealWithEscapeChars(jo.getString(AppConfiguration.TAG_ABOUT).replace("\"",""));
             }
         }
         catch(JSONException e)
@@ -324,7 +350,7 @@ public class MainActivity extends AppCompatActivity
     {
         String retString = inString
                 .replace("\"","") //the replace removed the "" around the title as returned by json
-                .replaceAll("(\\\\r)?\\\\n", System.getProperty("line.separator"))
+                .replaceAll("(\\\\r)?\\\\n", System.getProperty(AppConfiguration.FORMAT_LINE_SEPARATOR))
                 .replace("\\t",  ""); //deal with tab
         return retString;
     }

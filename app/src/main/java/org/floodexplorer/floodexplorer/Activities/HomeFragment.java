@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.R;
 
 
@@ -21,7 +22,7 @@ public class HomeFragment extends Fragment
     public static HomeFragment newInstance(String aboutTxt)
     {
         Bundle bundle = new Bundle();
-        bundle.putString("aboutText", aboutTxt);
+        bundle.putString(AppConfiguration.BUNDLE_TAG_HOME_ABOUT, aboutTxt);
 
         HomeFragment homeFragment = new HomeFragment();
         homeFragment.setArguments(bundle);
@@ -33,9 +34,10 @@ public class HomeFragment extends Fragment
     {
         this.readArgumentsBundle(getArguments());
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        this.setNavigationTitle();
+       // this.setNavigationTitle();
         this.textView = (TextView) view.findViewById(R.id.homeTxtView);
         this.textView.setText(aboutTxt);
+        setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
 
@@ -48,7 +50,7 @@ public class HomeFragment extends Fragment
     {
         if(bundle != null)
         {
-            this.aboutTxt = bundle.getString("aboutText");
+            this.aboutTxt = bundle.getString(AppConfiguration.BUNDLE_TAG_HOME_ABOUT);
         }
     }
 
@@ -56,7 +58,7 @@ public class HomeFragment extends Fragment
     {
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         View view = actionBar.getCustomView();
-        TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
-        textView.setText("Home");
+        //TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
+        //textView.setText("Home");
     }
 }

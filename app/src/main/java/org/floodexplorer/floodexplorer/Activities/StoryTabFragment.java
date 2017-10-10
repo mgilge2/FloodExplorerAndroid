@@ -21,6 +21,7 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
+import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.PicRayAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
@@ -60,7 +61,7 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
     public static StoryTabFragment newInstance(CustomMapMarker marker)
     {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("customMarker", marker);
+        bundle.putParcelable(AppConfiguration.BUNDLE_TAG_CUSTOM_MAP_MARKER, marker);
 
         StoryTabFragment storyTabActivity = new StoryTabFragment();
         storyTabActivity.setArguments(bundle);
@@ -98,7 +99,7 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
     {
         if(bundle != null)
         {
-            this.mapMarker = bundle.getParcelable("customMarker");
+            this.mapMarker = bundle.getParcelable(AppConfiguration.BUNDLE_TAG_CUSTOM_MAP_MARKER);
         }
     }
 
@@ -142,7 +143,7 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         uiSettings.setZoomControlsEnabled(true); //adds zoom buttons on map
 
         //set the map to what the initial settings for FloodExplorer.org are, this should be placed in a settings file at the least not hardcoded here...
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(47.47398, -118.5489564) , 6.8f) ); //set initial map zoom and location
+        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(AppConfiguration.MAP_STARTING_POINT , ((float) mapMarker.getZoom())) ); //set initial map zoom and location
         this.initClusterManager();
         this.googleMap.setOnCameraIdleListener(mClusterManager);
         this.googleMap.setOnMarkerClickListener(mClusterManager);
@@ -195,6 +196,6 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
     private void addFloodPointsToMap()
     {
         this.mClusterManager.addItem(mapMarker);
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(47.47398, -118.5489564) , 6.8f) ); //set initial map zoom and location
+        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(mapMarker.getPosition() , ((float) mapMarker.getZoom())) ); //set initial map zoom and location
     }
 }

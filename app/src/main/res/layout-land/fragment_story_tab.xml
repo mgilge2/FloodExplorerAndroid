@@ -105,7 +105,9 @@
                         android:layout_centerHorizontal="false"
                         android:layout_centerInParent="false"
                         android:layout_centerVertical="false"
-                        tools:context="org.floodexplorer.floodexplorer.Activities.MainActivity" />
+                        tools:context="org.floodexplorer.floodexplorer.Activities.MainActivity"
+                        tools:layout="@android:layout/simple_gallery_item"
+                        />
 
                 </RelativeLayout>
             </FrameLayout>

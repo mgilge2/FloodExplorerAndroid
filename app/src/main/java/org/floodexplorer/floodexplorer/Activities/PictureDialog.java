@@ -7,11 +7,13 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.R;
 
@@ -42,10 +44,10 @@ public class PictureDialog extends DialogFragment
         Bundle bundle = new Bundle();
         imageView.setDrawingCacheEnabled(true);
         Bitmap bitmap = imageView.getDrawingCache();
-        bundle.putParcelable("image", bitmap);
+        bundle.putParcelable(AppConfiguration.BUNDLE_TAG_PICTURE_DIALOGUE_IMAGE, bitmap);
 
         StoryItemDetails storyItem = (StoryItemDetails) imageView.getTag();
-        bundle.putSerializable("storyItem", storyItem);
+        bundle.putSerializable(AppConfiguration.BUNDLE_TAG_PICTURE_DIALOGUE_ITEM_DETAILS, storyItem);
 
         PictureDialog pictureDialog = new PictureDialog();
         pictureDialog.setArguments(bundle);
@@ -57,7 +59,7 @@ public class PictureDialog extends DialogFragment
     {
         this.readArgumentsBundle(getArguments());
         View rootView = inflater.inflate(R.layout.dialog_picture, container, false);
-        getDialog().setTitle("Simple Dialog");
+        getDialog().setTitle("Simple Dialog"); //might want to set this in config
         Button dismiss = (Button) rootView.findViewById(R.id.dismissBtn);
         dismiss.setOnClickListener(new View.OnClickListener()
         {
@@ -77,6 +79,16 @@ public class PictureDialog extends DialogFragment
         return rootView;
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    }
+
     //*******************************************************************
     //  Private Implementation Below Here....
     //
@@ -86,12 +98,12 @@ public class PictureDialog extends DialogFragment
     {
         if(bundle != null)
         {
-            Bitmap bitmap = bundle.getParcelable("image");
+            Bitmap bitmap = bundle.getParcelable(AppConfiguration.BUNDLE_TAG_PICTURE_DIALOGUE_IMAGE);
             ImageView passedImageView = new ImageView(getContext());
             passedImageView.setImageBitmap(bitmap);
             this.imageView = passedImageView;
 
-            StoryItemDetails storyItemPassed = (StoryItemDetails) bundle.getSerializable("storyItem");
+            StoryItemDetails storyItemPassed = (StoryItemDetails) bundle.getSerializable(AppConfiguration.BUNDLE_TAG_PICTURE_DIALOGUE_ITEM_DETAILS);
             this.storyItem = storyItemPassed;
         }
     }

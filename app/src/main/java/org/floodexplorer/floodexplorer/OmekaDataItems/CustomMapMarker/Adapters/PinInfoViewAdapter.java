@@ -49,7 +49,7 @@ public class PinInfoViewAdapter implements GoogleMap.InfoWindowAdapter
     public View getInfoWindow(Marker marker)
     {
         View popup = mInflater.inflate(R.layout.pin_info_layout, null);
-        ImageView imageView = popup.findViewById(R.id.pinImageView);
+        ImageView imageView = (ImageView) popup.findViewById(R.id.pinImageView);
         ((TextView) popup.findViewById(R.id.title)).setText(marker.getTitle());
         if(omekaDataItems != null)
         {

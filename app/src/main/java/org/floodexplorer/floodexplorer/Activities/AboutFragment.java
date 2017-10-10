@@ -2,9 +2,11 @@ package org.floodexplorer.floodexplorer.Activities;
 
 
 import android.app.ProgressDialog;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +50,6 @@ public class AboutFragment extends Fragment
 
         this.videoView = (VideoView) view.findViewById(R.id.videoView);
 
-
         // create a progress bar while the video file is loading
         progressDialog = new ProgressDialog(getContext());
         // set a title for the progress bar
@@ -58,14 +59,16 @@ public class AboutFragment extends Fragment
         //set the progress bar not cancelable on users' touch
         progressDialog.setCancelable(false);
         // show the progress bar
-        progressDialog.show();
+    //    progressDialog.show();
 
         try
         {
             //set the media controller in the VideoView
             videoView.setMediaController(mediaControls);
             //set the uri of the video to be played
-            videoView.setVideoURI(Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.tom));
+
+            String videoURL = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.tom;
+            videoView.setVideoURI(Uri.parse(videoURL));
         }
         catch (Exception e)
         {
@@ -92,7 +95,8 @@ public class AboutFragment extends Fragment
             }
         });
 
-        this.setNavigationTitle();
+     //   this.setNavigationTitle();
+        setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
 
@@ -124,7 +128,7 @@ public class AboutFragment extends Fragment
     {
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         View view = actionBar.getCustomView();
-        TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
-        textView.setText("About");
+        //TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
+        //textView.setText("About");
     }
 }

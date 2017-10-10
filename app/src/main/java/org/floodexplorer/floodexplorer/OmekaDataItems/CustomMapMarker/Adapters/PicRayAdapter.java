@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import org.floodexplorer.floodexplorer.Activities.MainActivity;
 import org.floodexplorer.floodexplorer.Activities.PictureDialog;
+import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.R;
@@ -99,7 +100,7 @@ public class PicRayAdapter extends ArrayAdapter<ImageView>
             String fileName = storyItem.getFileName();
             ImageView newImageView = new ImageView(mContext);
             Picasso.with(getContext())
-                    .load("http://floodexplorer.com/curatescape/files/original/" + fileName)
+                    .load(AppConfiguration.URL_IMAGES_ORIGINAL + fileName)
                    // .resize(250,250) //needs to be put in a settings file if we use it for actual
                     .into(newImageView);
             newImageView.setTag(storyItem);

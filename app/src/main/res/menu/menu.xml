@@ -5,7 +5,9 @@
 
     </group>
 
-    <item android:title="Communicate">
+    <item
+        android:id="@+id/aboutMenuItem"
+        android:title="About">
         <menu>
 
         </menu>

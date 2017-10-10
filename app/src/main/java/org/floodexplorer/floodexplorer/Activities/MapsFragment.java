@@ -30,6 +30,7 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
+import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.PinInfoViewAdapter;
@@ -67,7 +68,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     public static MapsFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
     {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("omekaDataList", omekaDataItems);
+        bundle.putParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS, omekaDataItems);
 
         MapsFragment mapsFragment = new MapsFragment();
         mapsFragment.setArguments(bundle);
@@ -80,7 +81,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         readArgumentsBundle(getArguments());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        this.setNavigationTitle();
+       // this.setNavigationTitle();
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
         this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
@@ -125,7 +126,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     {
         if(bundle != null)
         {
-            this.omekaDataItems = bundle.getParcelableArrayList("omekaDataList");
+            this.omekaDataItems = bundle.getParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
         }
     }
 
@@ -133,8 +134,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     {
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         View view = actionBar.getCustomView();
-        TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
-        textView.setText("Map");
+       // TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
+        //textView.setText("Map");
     }
 
 
@@ -221,7 +222,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         {
             this.mClusterManager.addItem(coord);
         }
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(47.47398, -118.5489564) , 6.8f) ); //set initial map zoom and location
+        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(AppConfiguration.MAP_STARTING_POINT ,AppConfiguration.MAP_STARTING_ZOOM)); //set initial map zoom and location
     }
 
     private void addChangeButtonHandler()
@@ -289,10 +290,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
        if(myDest == null)
        {
-           myDest  = new LatLng(47.473985, -118.0);
+           myDest  = AppConfiguration.MAP_STARTING_POINT;
        }
 
-       String url = "https://maps.googleapis.com/maps/";
+       String url = AppConfiguration.URL_GOOGLE_MAPS_ROUTING;
 
        Retrofit retrofit = new Retrofit.Builder()
                .baseUrl(url)
@@ -301,7 +302,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
        RetrofitMapsRoute service = retrofit.create(RetrofitMapsRoute.class);
 
-       Call<RouteExample> call = service.getDistanceDuration("english", origin.latitude + "," + origin.longitude, myDest.latitude + "," + myDest.longitude, type);
+       Call<RouteExample> call = service.getDistanceDuration(AppConfiguration.APP_LANGUAGE , origin.latitude + "," + origin.longitude, myDest.latitude + "," + myDest.longitude, type);
 
        call.enqueue(new Callback<RouteExample>()
        {
