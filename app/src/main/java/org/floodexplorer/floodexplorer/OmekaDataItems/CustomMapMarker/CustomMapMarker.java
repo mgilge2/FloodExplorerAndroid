@@ -1,24 +1,11 @@
 package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.ClusterItem;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabActivity;
-import org.floodexplorer.floodexplorer.R;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

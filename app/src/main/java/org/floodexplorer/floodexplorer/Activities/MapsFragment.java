@@ -30,10 +30,9 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
-import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabActivity;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.PinInfoViewAdapter;
+import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.PinInfoViewAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route.RouteExample;
 import org.floodexplorer.floodexplorer.R;
 import org.floodexplorer.floodexplorer.OmekaDataItems.RetrofitMapsRoute;
@@ -260,7 +259,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
             {
 
                 CustomMapMarker mapMarker = findMapMarker(marker);
-                Fragment fragment = StoryTabActivity.newInstance(mapMarker);
+                Fragment fragment = StoryTabFragment.newInstance(mapMarker);
                 FragmentManager fm =  getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.frameLayout, fragment);
