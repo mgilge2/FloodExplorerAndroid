@@ -33,7 +33,7 @@ public class PicRayAdapter extends ArrayAdapter<ImageView>
     private ArrayList<ImageView> imageList;
     private ArrayList<Bitmap> bitmapList;
     private View.OnClickListener picRayListener;
-    private GridView.LayoutParams layoutParams;
+
 
     public PicRayAdapter(@NonNull Context context, ArrayList inStringList)
     {
@@ -43,9 +43,7 @@ public class PicRayAdapter extends ArrayAdapter<ImageView>
         this.imageList = new ArrayList<ImageView>();
         this.bitmapList = new ArrayList<Bitmap>();
         this.picRayListener = this.onClickListenerGenerator();
-       // this.buildImageList();
         this.buildImageListPicasso();
-        layoutParams = new GridView.LayoutParams(150,150);
     }
 
     @Override

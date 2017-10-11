@@ -2,6 +2,8 @@ package org.floodexplorer.floodexplorer.Activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -40,7 +42,6 @@ public class PictureDialog extends DialogFragment
 
     public static PictureDialog newInstance(ImageView imageView)
     {
-
         Bundle bundle = new Bundle();
         imageView.setDrawingCacheEnabled(true);
         Bitmap bitmap = imageView.getDrawingCache();

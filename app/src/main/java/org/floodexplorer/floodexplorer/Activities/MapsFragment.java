@@ -4,6 +4,7 @@ package org.floodexplorer.floodexplorer.Activities;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -56,7 +57,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     private GoogleMap googleMap;
     private ArrayList<CustomMapMarker> omekaDataItems;
     private ClusterManager<CustomMapMarker> mClusterManager;
-    private Marker prevMarker;
+    private Marker selectedMarker;
     private Button changeButton;
     private Button routeButton;
     private LatLng myDest;
@@ -64,6 +65,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     private Location location;
     private Polyline line;
     private TextView ShowDistanceDuration;
+    private Marker prevMarker;
 
     public static MapsFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
     {
@@ -82,30 +84,31 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
        // this.setNavigationTitle();
-        final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        myMAPF.getMapAsync(this);
-        this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
-        this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
-        this.routeButton = (Button) view.findViewById(R.id.btnDriveWalk);
-        routeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Button button = (Button) v;
-                switch (button.getText().toString())
+
+            final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            myMAPF.getMapAsync(this);
+            this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
+            this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
+            this.routeButton = (Button) view.findViewById(R.id.btnDriveWalk);
+            routeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
                 {
-                    case "Driving":
-                        buildRoute("driving");
-                        button.setText("Walking");
-                        break;
-                    case "Walking":
-                        buildRoute("walking");
-                        button.setText("Driving");
-                        break;
+                    Button button = (Button) v;
+                    switch (button.getText().toString())
+                    {
+                        case "Driving":
+                            buildRoute("driving");
+                            button.setText("Walking");
+                            break;
+                        case "Walking":
+                            buildRoute("walking");
+                            button.setText("Driving");
+                            break;
+                    }
+                    //mapLogic.buildRoute("walking");
                 }
-                //mapLogic.buildRoute("walking");
-            }
-        });
+            });
         setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
@@ -116,6 +119,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         this.googleMap = googleMap;
         this.initMap();
     }
+
 
     //*******************************************************************
     //  Private Implementation Below Here....
@@ -165,21 +169,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                 myDest = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
                 try
                 {
-                    if(prevMarker != null)
+                    if(selectedMarker != null)
                     {
-                        prevMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                     }
-                    if(marker != null)
+                    if(marker != null) //need to somehow check if its a marker or if its a cluster we are actually clicking...
                     {
                         myDest = marker.getPosition();
                         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                        prevMarker = marker;
+                        selectedMarker = marker;
                     }
                 }
                 catch (Exception e)
                 {
                     //todo work on handling clicks both for cluster and indicating icon clicked, this is a temp fixish
-                    prevMarker = null;
+                    selectedMarker = null;
                     e.getStackTrace();
                 }
                 // marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));

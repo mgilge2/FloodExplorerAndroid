@@ -122,8 +122,6 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             {
                 e.getStackTrace();
             }
-
-
         }
     }
 

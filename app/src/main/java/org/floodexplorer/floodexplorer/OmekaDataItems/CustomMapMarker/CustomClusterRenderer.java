@@ -42,9 +42,7 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMapMarke
     {
         // Use this method to set your own icon for the markers
 
-        BitmapDescriptor icon =
-                //BitmapDescriptorFactory.fromResource(R.drawable.pin); custom icon can be set this way
-                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW); //just set color this way
+        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW); //just set color this way
         markerOptions.icon(icon);
       //  markerOptions.snippet("snippet");
     //    markerOptions.title("title");

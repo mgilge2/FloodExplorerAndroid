@@ -2,6 +2,7 @@ package org.floodexplorer.floodexplorer.Activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
@@ -44,8 +46,6 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
     private GridView gridView;
     private ArrayList<StoryItemDetails> storyItemDetailes;
     private GoogleMap googleMap;
-    private static final int MY_PERMISSIONS_REQUEST_MAP = 1;
-
 
     @Nullable
     @Override
@@ -80,7 +80,7 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         this.storyText = (TextView) view.findViewById(R.id.storyBodyTxt);
         this.storyTitle = (TextView) view.findViewById(R.id.storyTitleTxt);
         this.gridView = (GridView) view.findViewById(R.id.gridview);
-
+        setRetainInstance(true);
         this.initTabHost();
     }
 
@@ -91,6 +91,25 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         this.initMap();
     }
 
+    //Below two methods have to do with saving the selected tab when rotating...
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null)
+        {
+            this.host.setCurrentTab(savedInstanceState.getInt("selectedTab"));
+            this.storyItemDetailes = (ArrayList<StoryItemDetails>)savedInstanceState.getSerializable("storyItemDetails");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("selectedTab", this.host.getCurrentTab());
+        savedInstanceState.putSerializable("storyItemDetails", storyItemDetailes);
+    }
 
     //*******************************************************************
     //  Private Implementation Below Here....
@@ -150,8 +169,6 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         this.googleMap.setOnCameraIdleListener(mClusterManager);
         this.googleMap.setOnMarkerClickListener(mClusterManager);
         this.addFloodPointsToMap();
-       // this.addChangeButtonHandler();
-       // this.addMarkerInfoHandler();
     }
 
     private void initClusterManager()
@@ -161,7 +178,16 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker)
             {
-
+             //   if(prevMarker != null)
+               // {
+              //      prevMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+              //  }
+             //   if(!marker.equals(prevMarker))
+              //  {
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+              //      prevMarker = marker;
+           //     }
+              //  prevMarker = marker;
                 return super.onMarkerClick(marker);
             }
         });
