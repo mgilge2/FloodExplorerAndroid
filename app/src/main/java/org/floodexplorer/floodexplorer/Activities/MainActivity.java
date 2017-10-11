@@ -1,12 +1,15 @@
 package org.floodexplorer.floodexplorer.Activities;
 
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.floodexplorer.floodexplorer.Manifest;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.AppConfiguration;
@@ -35,11 +39,11 @@ public class MainActivity extends AppCompatActivity
     private String homeQueryResults;
     private ArrayList<CustomMapMarker> omekaDataItems; //this is our model for MVC....
     private BottomNavigationView navigation;
+    private static int MY_PERMISSIONS_REQUEST_MAP = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.customizeActionBar();
@@ -236,9 +240,9 @@ public class MainActivity extends AppCompatActivity
             {
                 JSONObject jo = result.getJSONObject(x);
                 int id = jo.getInt(AppConfiguration.TAG_ID);
-                String fileName = jo.getString(AppConfiguration.TAG_FILE).replace("\"","");;
-                String title = jo.getString(AppConfiguration.TAG_ITEM_TITLE);
-                String caption = jo.getString(AppConfiguration.TAG_CAPTION);
+                String fileName = this.dealWithEscapeChars(jo.getString(AppConfiguration.TAG_FILE).replace("\"",""));
+                String title = this.dealWithEscapeChars(jo.getString(AppConfiguration.TAG_ITEM_TITLE));
+                String caption = this.dealWithEscapeChars(jo.getString(AppConfiguration.TAG_CAPTION));
                 StoryItemDetails storyItemDetails = new StoryItemDetails(fileName, title, caption);
                 ArrayList<CustomMapMarker> mapMarkers = omekaDataItems;
                 for(CustomMapMarker marker: omekaDataItems)

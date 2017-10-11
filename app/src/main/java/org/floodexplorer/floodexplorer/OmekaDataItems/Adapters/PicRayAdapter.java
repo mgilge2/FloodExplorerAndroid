@@ -1,33 +1,25 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters;
+package org.floodexplorer.floodexplorer.OmekaDataItems.Adapters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.floodexplorer.floodexplorer.Activities.MainActivity;
 import org.floodexplorer.floodexplorer.Activities.PictureDialog;
 import org.floodexplorer.floodexplorer.AppConfiguration;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.R;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -53,23 +45,41 @@ public class PicRayAdapter extends ArrayAdapter<ImageView>
         this.picRayListener = this.onClickListenerGenerator();
        // this.buildImageList();
         this.buildImageListPicasso();
-        layoutParams = new GridView.LayoutParams(350,350);
+        layoutParams = new GridView.LayoutParams(150,150);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        ImageView imageView;
-        imageView = imageList.get(position);
-        imageView.setLayoutParams(layoutParams);
-        imageView.setPadding(25, 25, 25, 25);
+        View gridViewAndroid;
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        //imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        if(convertView == null)
+        {
+            gridViewAndroid = inflater.inflate(R.layout.gridview_layout, null);
+            TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
+            ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
 
-        imageView.setOnClickListener(picRayListener);
 
-        return imageView;
+             ImageView imageView = (imageList.get(position));
+            imageViewAndroid.setImageDrawable(imageView.getDrawable());
+            //imageView.setDrawingCacheEnabled(true);
+            //Bitmap bitmap = imageView.getDrawingCache(true);
+            //imageViewAndroid.setImageBitmap(bitmap);
+            Object obj =  imageView.getTag();
+            StoryItemDetails details = (StoryItemDetails) obj;
+            textViewAndroid.setText(details.getFileTitle());
+
+            imageViewAndroid.setTag(details);
+            imageViewAndroid.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageViewAndroid.setOnClickListener(picRayListener);
+
+        }
+        else
+        {
+            gridViewAndroid = (View) convertView;
+        }
+        return gridViewAndroid;
     }
 
     //*******************************************************************

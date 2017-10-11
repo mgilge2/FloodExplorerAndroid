@@ -9,11 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.CustomMarkerAdapter;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.CustomMarkerAdapter;
 import org.floodexplorer.floodexplorer.R;
 
 import java.util.ArrayList;

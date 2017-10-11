@@ -33,7 +33,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.PinInfoViewAdapter;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PinInfoViewAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route.RouteExample;
 import org.floodexplorer.floodexplorer.R;
 import org.floodexplorer.floodexplorer.OmekaDataItems.RetrofitMapsRoute;

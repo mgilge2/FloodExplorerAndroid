@@ -15,17 +15,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.floodexplorer.floodexplorer.AppConfiguration;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.PicRayAdapter;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PicRayAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters.PinInfoViewAdapter;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PinInfoViewAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.R;
 
@@ -45,6 +44,8 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
     private GridView gridView;
     private ArrayList<StoryItemDetails> storyItemDetailes;
     private GoogleMap googleMap;
+    private static final int MY_PERMISSIONS_REQUEST_MAP = 1;
+
 
     @Nullable
     @Override
@@ -89,6 +90,7 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         this.googleMap = googleMap;
         this.initMap();
     }
+
 
     //*******************************************************************
     //  Private Implementation Below Here....

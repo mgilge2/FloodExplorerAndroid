@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.Adapters;
+package org.floodexplorer.floodexplorer.OmekaDataItems.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.floodexplorer.floodexplorer.Activities.MainActivity;
 import org.floodexplorer.floodexplorer.Activities.StoryTabFragment;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.R;
