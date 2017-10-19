@@ -65,7 +65,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     private Location location;
     private Polyline line;
     private TextView ShowDistanceDuration;
-    private Marker prevMarker;
+    private Marker saveMarker;
 
     public static MapsFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
     {
@@ -85,8 +85,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
        // this.setNavigationTitle();
 
+
             final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             myMAPF.getMapAsync(this);
+
             this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
             this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
             this.routeButton = (Button) view.findViewById(R.id.btnDriveWalk);
@@ -117,9 +119,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap)
     {
         this.googleMap = googleMap;
-        this.initMap();
+        this.initNewMap();
     }
 
+    //Below two methods have to do with saving the selected tab when rotating...
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null)
+        {
+            setRetainInstance(true);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        //savedInstanceState.putSerializable("markerOptions", mClusterManager);
+       // savedInstanceState.putSerializable("storyItemDetails", storyItemDetailes);
+    }
 
     //*******************************************************************
     //  Private Implementation Below Here....
@@ -142,8 +162,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         //textView.setText("Map");
     }
 
-
-    private void initMap()
+    private void initNewMap()
     {
         this.googleMap.setMyLocationEnabled(true);
         UiSettings uiSettings = this.googleMap.getUiSettings();

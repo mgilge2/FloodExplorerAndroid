@@ -8,6 +8,7 @@ import com.google.maps.android.clustering.ClusterItem;
 
 import org.floodexplorer.floodexplorer.AppConfiguration;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * with a sepcific item within this class
  */
 
-public class CustomMapMarker implements ClusterItem, Parcelable
+public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
 {
     private LatLng mPosition;
     private String mTitle;

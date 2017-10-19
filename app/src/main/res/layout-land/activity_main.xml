@@ -27,6 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@color/colorNavBarIconsStarting"
         app:menu="@menu/navigation" />
 
 

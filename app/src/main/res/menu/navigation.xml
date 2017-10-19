@@ -15,9 +15,4 @@
         android:id="@+id/navigation_map"
         android:icon="@drawable/ic_map_white_24dp"
         android:title="@string/title_map" />
-    <item
-        android:id="@+id/navigation_about"
-        android:icon="@android:drawable/ic_dialog_info"
-        android:title="@string/title_about" />
-
 </menu>

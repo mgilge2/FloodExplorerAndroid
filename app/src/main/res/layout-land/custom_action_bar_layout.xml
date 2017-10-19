@@ -8,23 +8,11 @@
 
     <ImageView
         android:id="@+id/ActionBarImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/ewulogoresized" />
-        <TextView
-            android:id="@+id/titleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="Flood Explorer"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:typeface="sans"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+        app:srcCompat="@drawable/flood_explorer_horiz" />
 
 </RelativeLayout>

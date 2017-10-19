@@ -1,5 +1,8 @@
 package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
@@ -33,4 +36,5 @@ public class StoryItemDetails implements Serializable
     {
         return fileCaption;
     }
+
 }

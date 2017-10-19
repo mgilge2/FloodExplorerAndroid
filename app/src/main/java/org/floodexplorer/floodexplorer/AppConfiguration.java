@@ -3,7 +3,6 @@ package org.floodexplorer.floodexplorer;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -52,12 +51,20 @@ public class AppConfiguration
     //Details for layouts such as color for mav bars, images, etc.
    // public static final String BtmNavBarColor = "#23B0FC"; //dodger blue color
     public static final String BtmNavBarIconColor = "#FFFFFF"; //icon color white
-    public static final ColorDrawable BtmNavBarColor = new ColorDrawable(Color.parseColor("#23B0FC"));
-    public static final ColorDrawable ActionBarColor = new ColorDrawable(Color.parseColor("#23B0FC"));
+    public static final ColorDrawable BtmNavBarColor = new ColorDrawable(Color.parseColor("#176130"));
+    public static final ColorDrawable ActionBarColor = new ColorDrawable(Color.parseColor("#176130"));
 
+    /*
     //Web addresses for loading images and other things...
     public static final String URL_IMAGES_SQUARE_THUMBNAILS = "http://floodexplorer.com/curatescape/files/square_thumbnails/";
     public static final String URL_IMAGES_ORIGINAL = "http://floodexplorer.com/curatescape/files/original/";
+    public static final String URL_DEFAULT_IMAGE = "http://floodexplorer.com/rockhammer.png";
+    public static final String URL_GOOGLE_MAPS_ROUTING = "https://maps.googleapis.com/maps/";
+*/
+
+    //Web addresses for loading images and other things...
+    public static final String URL_IMAGES_SQUARE_THUMBNAILS = "http://floodexplorer.org//files/square_thumbnails/";
+    public static final String URL_IMAGES_ORIGINAL = "http://floodexplorer.org//files/original/";
     public static final String URL_DEFAULT_IMAGE = "http://floodexplorer.com/rockhammer.png";
     public static final String URL_GOOGLE_MAPS_ROUTING = "https://maps.googleapis.com/maps/";
 

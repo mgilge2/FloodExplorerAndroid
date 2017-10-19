@@ -13,18 +13,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/ewulogoresized" />
-        <TextView
-            android:id="@+id/titleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="casual"
-            android:text="Flood Explorer"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+        app:srcCompat="@drawable/flood_explorer_horiz" />
 
 </RelativeLayout>

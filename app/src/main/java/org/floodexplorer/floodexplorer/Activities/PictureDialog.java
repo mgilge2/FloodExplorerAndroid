@@ -37,7 +37,7 @@ public class PictureDialog extends DialogFragment
 
     public PictureDialog() //this should be done in a fragment bundle......
     {
-        this.layoutParams = new RelativeLayout.LayoutParams(1000,1000);
+       // this.layoutParams = new RelativeLayout.LayoutParams(1000,1000);
     }
 
     public static PictureDialog newInstance(ImageView imageView)

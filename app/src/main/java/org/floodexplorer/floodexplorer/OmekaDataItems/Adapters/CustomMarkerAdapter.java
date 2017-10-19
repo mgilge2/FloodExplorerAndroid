@@ -114,7 +114,10 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             {
 
                 //new DownloadImageTask(mImageView).execute(url);
-                Picasso.with(getContext()).load(url).into(mImageView);
+                Picasso.with(getContext())
+                        .load(url)
+                        .resize(250,250)
+                        .into(mImageView);
 
                 //    this.getRetrofitImage(url); buggy!!
             }

@@ -34,7 +34,6 @@ public class PicRayAdapter extends ArrayAdapter<ImageView>
     private ArrayList<Bitmap> bitmapList;
     private View.OnClickListener picRayListener;
 
-
     public PicRayAdapter(@NonNull Context context, ArrayList inStringList)
     {
         super(context, 0, inStringList);
@@ -107,9 +106,11 @@ public class PicRayAdapter extends ArrayAdapter<ImageView>
         {
             String fileName = storyItem.getFileName();
             ImageView newImageView = new ImageView(mContext);
+
             Picasso.with(getContext())
                     .load(AppConfiguration.URL_IMAGES_ORIGINAL + fileName)
-                   // .resize(250,250) //needs to be put in a settings file if we use it for actual
+                    .resize(250,250) //will resize the original to square which makes everything render nice.....this needs work, What I want to do next is make two lists, one resized that is displayed, and another that is the original for the picture dialog....
+                    //.centerInside()  //goes with aboive....and causes some additional problems
                     .into(newImageView);
             newImageView.setTag(storyItem);
             imageList.add(newImageView);
