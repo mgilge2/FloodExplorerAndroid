@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.AppConfiguration;
@@ -43,6 +44,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if(savedInstanceState == null)
         {
             getSupportLoaderManager().initLoader(0,null,this);
+        }
+    }
+
+    //For handling the back button when pressed within a fragment....
+    @Override
+    public void onBackPressed()
+    {
+        if (getFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getFragmentManager().popBackStack();
+        }
+        else
+        {
+            super.onBackPressed();
         }
     }
 
@@ -157,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
        // actionBar.setDisplayShowTitleEnabled(true);
         View view = getSupportActionBar().getCustomView();
         //can now use view to get at buttons, images and anything else we wish....
-    }
 
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener()
     {

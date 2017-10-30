@@ -89,7 +89,9 @@ public class CustomMarkerListBuilder
                 float zoom = locObject.getInt(RESTConfig.TAG_ZOOM);
                 int locId = locItem.getInt(RESTConfig.TAG_ID);
                 String title = "";
-                String storyText = "";
+                String storyText = "\t\t\t\t";
+                String snippet = "";
+                String resources = "";
 
                 for(int y = 0; y < itemTextsArray.length(); y ++)
                 {
@@ -106,14 +108,39 @@ public class CustomMarkerListBuilder
                             {
                                 title = itemElement.getString(RESTConfig.TAG_TEXT);
                             }
+                            else if(index == 3)
+                            {
+                                resources += itemElement.getString(RESTConfig.TAG_TEXT);
+                            }
                             else
                             {
-                                storyText += itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";  //this is where we need to deal with getting things specific such as author and sources
+                                String str =  itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";
+                                String split[] = str.split("\\s+");
+                                if(split.length <= 1 )
+                                {
+                                   continue;
+                                }
+                                else
+                                {
+                                    if(split.length <= 5)
+                                    {
+                                        snippet = itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";
+                                    }
+                                    else
+                                    {
+                                        storyText += itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";  //this is where we need to deal with getting things specific such as author and sources
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                CustomMapMarker addMarker = new CustomMapMarker(latitude, longitude, title, "", zoom, storyText, locId);
+                storyText = storyText.replaceAll("\n","\n\t\t\t\t");
+                if(resources.length() > 1)
+                {
+                    resources = "Resources: \n" + resources;
+                }
+                CustomMapMarker addMarker = new CustomMapMarker(latitude, longitude, title, snippet, zoom, storyText, locId, resources);
                 this.omekaDataItems.add(addMarker);
             }
             this.addStoryItemsToCustomMarkers(filesArray);

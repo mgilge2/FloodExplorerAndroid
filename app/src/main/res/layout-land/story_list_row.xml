@@ -17,9 +17,24 @@
         android:id="@+id/storyLblTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="22dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_toEndOf="@+id/imageButton"
         android:layout_toRightOf="@+id/imageButton"
         android:text="TextView"
-        android:textColor="@android:color/black" />
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/storyListAuthorTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/storyLblTxt"
+        android:layout_alignRight="@+id/storyLblTxt"
+        android:layout_below="@+id/storyLblTxt"
+        android:text="TextView"
+        android:layout_alignLeft="@+id/storyLblTxt"
+        android:layout_alignStart="@+id/storyLblTxt" />
 </RelativeLayout>

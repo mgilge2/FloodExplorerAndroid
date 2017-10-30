@@ -34,7 +34,7 @@ public class LoadingScreenFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_loading_screen, container, false);
         BottomNavigationView navigationView = (BottomNavigationView) view.findViewById(R.id.navigation);
         mBar= (ProgressBar) view.findViewById(R.id.progressBar2);
-        //this.customizeProgressBar();
+        this.customizeProgressBar();
         //navigationView.setEnabled(false);
         return view;
     }

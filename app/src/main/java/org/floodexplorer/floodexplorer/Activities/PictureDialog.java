@@ -1,5 +1,6 @@
 package org.floodexplorer.floodexplorer.Activities;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
@@ -34,6 +37,7 @@ public class PictureDialog extends DialogFragment
     private StoryItemDetails storyItem;
     private ArrayList<ImageView> imageList;
     private RelativeLayout.LayoutParams layoutParams;
+    private Context context;
 
     public PictureDialog() //this should be done in a fragment bundle......
     {
@@ -102,16 +106,29 @@ public class PictureDialog extends DialogFragment
             Bitmap bitmap = bundle.getParcelable(AppConfiguration.BUNDLE_TAG_PICTURE_DIALOGUE_IMAGE);
             ImageView passedImageView = new ImageView(getContext());
             passedImageView.setImageBitmap(bitmap);
-            this.imageView = passedImageView;
 
             StoryItemDetails storyItemPassed = (StoryItemDetails) bundle.getSerializable(AppConfiguration.BUNDLE_TAG_PICTURE_DIALOGUE_ITEM_DETAILS);
             this.storyItem = storyItemPassed;
         }
     }
 
+    private void buildImagePicasso() //need to handle data for images here...
+    {
+
+        String fileName = storyItem.getFileName();
+
+        Picasso.with(getContext())
+                .load(AppConfiguration.URL_IMAGES_ORIGINAL + fileName)
+                //.resize(250,250) //will resize the original to square which makes everything render nice.....this needs work, What I want to do next is make two lists, one resized that is displayed, and another that is the original for the picture dialog....
+                //.centerInside()  //goes with aboive....and causes some additional problems
+                .into(dialogImageView);
+    }
+
+
     private void setStoryItemData()
     {
-        this.dialogImageView.setImageDrawable(imageView.getDrawable());
+        //this.dialogImageView.setImageDrawable(imageView.getDrawable());
+        buildImagePicasso();
         this.configureImageView();
         this.txtImageTitle.setText(storyItem.getFileTitle());
         this.txtImageCaption.setText(storyItem.getFileCaption());

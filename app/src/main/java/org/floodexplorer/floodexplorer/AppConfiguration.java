@@ -83,4 +83,10 @@ public class AppConfiguration
 
     //Stuff to do with formatting
     public static final String FORMAT_LINE_SEPARATOR = "line.separator";
+
+    //App Colors
+    public static final ColorDrawable LIST_BACK_COLOR = new ColorDrawable(Color.TRANSPARENT);
+    public static final ColorDrawable LIST_SELECT_COLOR = new ColorDrawable(Color.CYAN);
+
+
 }

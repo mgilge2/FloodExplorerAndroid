@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/mammothtransparent2"
     android:orientation="vertical"
     tools:context="org.floodexplorer.floodexplorer.Activities.HomeFragment">
 
@@ -31,6 +32,10 @@
             android:id="@+id/homeTxtView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp" />
     </ScrollView>
 </LinearLayout>

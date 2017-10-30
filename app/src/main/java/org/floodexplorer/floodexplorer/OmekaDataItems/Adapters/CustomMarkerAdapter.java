@@ -3,6 +3,7 @@ package org.floodexplorer.floodexplorer.OmekaDataItems.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +20,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTab;
+import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabImages;
 import org.floodexplorer.floodexplorer.Activities.StoryTabFragment;
+import org.floodexplorer.floodexplorer.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.R;
 
@@ -36,11 +40,13 @@ import java.util.ArrayList;
 public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
 {
     private TextView storyLabel;
+    private TextView storyAuthorLabel;
     private ImageView mImageView;
     private LruCache<String, Bitmap> mMemoryCache;
     private Context context;
     private ListView listView;
     private View view;
+    private View selectedView;
 
     public CustomMarkerAdapter(Context context, ArrayList<CustomMapMarker> users)
     {
@@ -58,16 +64,19 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             view = convertView;
         }
 
-        this.setupMemoryCache();
         storyLabel = (TextView) convertView.findViewById(R.id.storyLblTxt);
+        storyAuthorLabel = (TextView) convertView.findViewById(R.id.storyListAuthorTxt);
+        storyAuthorLabel.setText("by: " + marker.getSnippet());
         storyLabel.setText(marker.getTitle());
         mImageView = (ImageView) convertView.findViewById(R.id.imageButton);
         mImageView.setTag(position);
+        convertView.setTag(position);
 
         String url = marker.getStoryImgageUrl();
         this.loadBitmapPicasso(position, mImageView,url);
         this.setButtonListener();
         this.setItemRowListener();
+        convertView.setBackgroundColor(AppConfiguration.LIST_BACK_COLOR.getColor());
         return convertView;
     }
 
@@ -83,7 +92,17 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(context, "Click The Picture to go to the story...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Click The Picture to go to the story...", Toast.LENGTH_SHORT).show();
+
+                //need more...
+                if(selectedView != null)
+                {
+                    selectedView.setBackgroundColor(AppConfiguration.LIST_BACK_COLOR.getColor());
+                }
+                view.setBackgroundColor(AppConfiguration.LIST_SELECT_COLOR.getColor());
+                selectedView = view;
+                //launchStory(view);
+                launchStoryTabView(view);
 
                 /*
                 int position = (Integer) view.getTag();
@@ -98,11 +117,60 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
         });
     }
 
+    private void launchStoryTabView(View view)
+    {
+        int position = (Integer) view.getTag();
+        // Access the row position here to get the correct data item
+        CustomMapMarker customMapMarker = getItem(position);
+
+        // Do what you want here...
+                /*
+                Toast.makeText(MainActivity.getInstance().getApplicationContext(),
+                        customMapMarker.getSnippet(), Toast.LENGTH_LONG).show();
+                        */
+                /*
+                FragmentManager fm = MainActivity.getInstance().getSupportFragmentManager();
+                DisplayStory dialogFragment = new DisplayStory(customMapMarker.getStoryText(), mImageView);
+                dialogFragment.show(fm, "Sample Fragment");
+*/
+        PicRayAdapter picRayAdapter = new PicRayAdapter(context, customMapMarker.getFileList()); //this line of code is to for picasso to load thumbs for later useage
+        StoryTabImages storyTabImages = StoryTabImages.newInstance(customMapMarker);
+        Fragment fragment = StoryTab.newInstance(customMapMarker);
+        FragmentManager fm =  ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frameLayout, fragment).addToBackStack("fragment");
+        ft.commit();
+    }
+
+    private void launchStory(View view)
+    {
+        int position = (Integer) view.getTag();
+        // Access the row position here to get the correct data item
+        CustomMapMarker customMapMarker = getItem(position);
+
+        // Do what you want here...
+                /*
+                Toast.makeText(MainActivity.getInstance().getApplicationContext(),
+                        customMapMarker.getSnippet(), Toast.LENGTH_LONG).show();
+                        */
+                /*
+                FragmentManager fm = MainActivity.getInstance().getSupportFragmentManager();
+                DisplayStory dialogFragment = new DisplayStory(customMapMarker.getStoryText(), mImageView);
+                dialogFragment.show(fm, "Sample Fragment");
+*/
+
+        Fragment fragment = StoryTabFragment.newInstance(customMapMarker);
+        FragmentManager fm =  ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frameLayout, fragment).addToBackStack("fragment");
+        ft.commit();
+    }
+
     private void loadBitmapPicasso(int resId, ImageView imageView, String url)
     {
         final String imageKey = String.valueOf(resId);
 
-        final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+         Bitmap bitmap = null;
         if (bitmap != null)
         {
             mImageView.setImageBitmap(bitmap);
@@ -126,36 +194,6 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
                 e.getStackTrace();
             }
         }
-    }
-
-    private void addBitmapToMemoryCache(String key, Bitmap bitmap)
-    {
-        if (getBitmapFromMemCache(key) == null) {
-            mMemoryCache.put(key, bitmap);
-        }
-    }
-
-    private Bitmap getBitmapFromMemCache(String key)
-    {
-        return mMemoryCache.get(key);
-    }
-
-    private void setupMemoryCache()
-    {
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = maxMemory / 8;
-
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap)
-            {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
-                return bitmap.getByteCount() / 1024;
-            }
-        };
     }
 
     private void setButtonListener()
@@ -182,75 +220,10 @@ public class CustomMarkerAdapter extends ArrayAdapter<CustomMapMarker>
                 Fragment fragment = StoryTabFragment.newInstance(customMapMarker);
                 FragmentManager fm =  ((AppCompatActivity)context).getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frameLayout, fragment);
+                ft.replace(R.id.frameLayout, fragment).addToBackStack("fragment");
                 ft.commit();
             }
         });
     }
 
-    //Below has been deprecated by picasso call.... Will remove before release!
-
-    public void loadBitmap(int resId, ImageView imageView, String url)
-    {
-        final String imageKey = String.valueOf(resId);
-
-        final Bitmap bitmap = getBitmapFromMemCache(imageKey);
-        if (bitmap != null)
-        {
-            mImageView.setImageBitmap(bitmap);
-        }
-        else
-        {
-            mImageView.setImageResource(R.drawable.rockhammer);
-            try
-            {
-
-                new DownloadImageTask(mImageView)
-                        .execute(url);
-
-                //    this.getRetrofitImage(url); buggy!!
-            }
-            catch (Exception e)
-            {
-                e.getStackTrace();
-            }
-        }
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap>
-    {
-        private String url;
-        ImageView mHeaderPicture;
-        public DownloadImageTask(ImageView mHeaderPicture)
-        {
-            this.mHeaderPicture= mHeaderPicture;
-        }
-        protected Bitmap doInBackground(String... urls)
-        {
-            url = urls[0];
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try
-            {
-                InputStream in = new URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-                return mIcon11;
-            }
-            catch (Exception e)
-            {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-        //    Bitmap returnBitmap = getResizedBitmap(mIcon11, 100, 100);
-
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result)
-        {
-            mHeaderPicture.setImageBitmap(result); //Bitmap.createScaledBitmap(result, 100, 100, false)  setImageBitmap(result)
-            addBitmapToMemoryCache(String.valueOf(url), result);
-        }
-
-    };
 }

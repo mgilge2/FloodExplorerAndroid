@@ -16,6 +16,7 @@ import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.CustomMarkerAdapt
 import org.floodexplorer.floodexplorer.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -74,5 +75,6 @@ public class StoriesFragment extends Fragment
     {
         CustomMarkerAdapter customMarkerAdapter = new CustomMarkerAdapter(getContext(), omekaDataItems);
         storyListView.setAdapter(customMarkerAdapter);
+        this.storyListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 }

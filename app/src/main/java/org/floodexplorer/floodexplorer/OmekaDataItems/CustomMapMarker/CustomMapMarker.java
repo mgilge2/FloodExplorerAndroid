@@ -28,6 +28,9 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
     private ArrayList<StoryItemDetails> fileList;
     private int id;
 
+
+    private String storyResources;
+
     public CustomMapMarker(double lat, double lng)
     {
         super();
@@ -41,20 +44,21 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
 
         this.mPosition = new LatLng(lat, lng);
         this.mTitle = title;
-        this.mSnippet = ""; //disabling snippet = ""
+        this.mSnippet = snippet; //disabling snippet = ""
         this.fileList = new ArrayList<StoryItemDetails>();
     }
 
-    public CustomMapMarker(double lat, double lng, String title, String snippet, double zoom, String storyText, int id)
+    public CustomMapMarker(double lat, double lng, String title, String snippet, double zoom, String storyText, int id, String storyResources)
     {
 
         this.mPosition = new LatLng(lat, lng);
         this.mTitle = title;
-  //      this.mSnippet = ""; //disabling snippet = ""
+        this.mSnippet = snippet; //disabling snippet = ""
         this.storyText = storyText;
         this.zoom = zoom;
         this.fileList = new ArrayList<StoryItemDetails>();
         this.id = id;
+        this.storyResources = storyResources;
     }
 
     public CustomMapMarker(Parcel parcel)
@@ -124,6 +128,11 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
         {
             return AppConfiguration.URL_DEFAULT_IMAGE;
         }
+    }
+
+    public String getStoryResources()
+    {
+        return storyResources;
     }
 
     public int getId() {

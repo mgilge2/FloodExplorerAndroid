@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +30,7 @@ import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapM
 import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PinInfoViewAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.R;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -43,7 +45,9 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
     private TabHost host;
     private TextView storyText;
     private TextView storyTitle;
+    private TextView storyAuthor;
     private GridView gridView;
+    private TextView storyResources;
     private ArrayList<StoryItemDetails> storyItemDetailes;
     private GoogleMap googleMap;
 
@@ -79,10 +83,13 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         this.host = (TabHost) view.findViewById(R.id.tabHost);
         this.storyText = (TextView) view.findViewById(R.id.storyBodyTxt);
         this.storyTitle = (TextView) view.findViewById(R.id.storyTitleTxt);
+        this.storyAuthor = (TextView) view.findViewById(R.id.storyAuthorTxt);
         this.gridView = (GridView) view.findViewById(R.id.gridview);
+        this.storyResources= (TextView) view.findViewById(R.id.storyResources);
         setRetainInstance(true);
         this.initTabHost();
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap)
@@ -111,6 +118,7 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         savedInstanceState.putSerializable("storyItemDetails", storyItemDetailes);
     }
 
+
     //*******************************************************************
     //  Private Implementation Below Here....
     //
@@ -134,6 +142,8 @@ public class StoryTabFragment extends Fragment implements OnMapReadyCallback
         spec.setIndicator("Story");
         this.storyText.setText(this.mapMarker.getStoryText());
         this.storyTitle.setText(this.mapMarker.getTitle());
+        this.storyAuthor.setText("By: " + this.mapMarker.getSnippet());
+        this.storyResources.setText(this.mapMarker.getStoryResources());
         host.addTab(spec);
 
         //Tab 2

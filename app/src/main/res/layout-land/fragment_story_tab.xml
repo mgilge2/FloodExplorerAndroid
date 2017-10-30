@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/mammothtransparent2"
     tools:context="org.floodexplorer.floodexplorer.Activities.MainActivity">
 
     <TabHost
@@ -45,14 +46,37 @@
                                 android:id="@+id/storyTitleTxt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/activity_horizontal_margin"
+                                android:paddingRight="@dimen/activity_horizontal_margin"
                                 android:paddingTop="10dp"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                android:textColor="@android:color/black"
+                                android:textSize="36sp" />
+
+                            <TextView
+                                android:id="@+id/storyAuthorTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/activity_horizontal_margin"
+                                android:textSize="14sp" />
 
                             <TextView
                                 android:id="@+id/storyBodyTxt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingTop="10dp" />
+                                android:paddingLeft="@dimen/activity_horizontal_margin"
+                                android:paddingRight="@dimen/activity_horizontal_margin"
+                                android:paddingTop="10dp"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/storyResources"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/activity_horizontal_margin"
+                                android:paddingRight="@dimen/activity_horizontal_margin"
+                                android:text="TextView" />
                         </LinearLayout>
                     </ScrollView>
 
@@ -106,8 +130,7 @@
                         android:layout_centerInParent="false"
                         android:layout_centerVertical="false"
                         tools:context="org.floodexplorer.floodexplorer.Activities.MainActivity"
-                        tools:layout="@android:layout/simple_gallery_item"
-                        />
+                        tools:layout="@android:layout/simple_gallery_item" />
 
                 </RelativeLayout>
             </FrameLayout>
