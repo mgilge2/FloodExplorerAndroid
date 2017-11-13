@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route;
+package org.floodexplorer.floodexplorer.POJO.Route;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +18,8 @@ public class Leg
      * @return
      * The distance
      */
-    public Distance getDistance() {
+    public Distance getDistance()
+    {
         return distance;
     }
 
@@ -27,7 +28,8 @@ public class Leg
      * @param distance
      * The distance
      */
-    public void setDistance(Distance distance) {
+    public void setDistance(Distance distance)
+    {
         this.distance = distance;
     }
 
@@ -36,7 +38,8 @@ public class Leg
      * @return
      * The duration
      */
-    public Duration getDuration() {
+    public Duration getDuration()
+    {
         return duration;
     }
 
@@ -45,7 +48,8 @@ public class Leg
      * @param duration
      * The duration
      */
-    public void setDuration(Duration duration) {
+    public void setDuration(Duration duration)
+    {
         this.duration = duration;
     }
 

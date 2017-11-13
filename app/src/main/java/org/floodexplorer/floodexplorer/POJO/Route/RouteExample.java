@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route;
+package org.floodexplorer.floodexplorer.POJO.Route;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +18,8 @@ public class RouteExample
      * @return
      * The routes
      */
-    public List<Route> getRoutes() {
+    public List<Route> getRoutes()
+    {
         return routes;
     }
 
@@ -27,7 +28,8 @@ public class RouteExample
      * @param routes
      * The routes
      */
-    public void setRoutes(List<Route> routes) {
+    public void setRoutes(List<Route> routes)
+    {
         this.routes = routes;
     }
 

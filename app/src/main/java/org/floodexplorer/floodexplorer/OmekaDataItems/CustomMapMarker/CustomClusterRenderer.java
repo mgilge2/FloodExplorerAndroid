@@ -46,8 +46,6 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMapMarke
         markerOptions.icon(icon);
       //  markerOptions.snippet("snippet");
     //    markerOptions.title("title");
-
-
     }
 
     @Override

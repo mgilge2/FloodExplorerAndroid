@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Nearest;
+package org.floodexplorer.floodexplorer.POJO.Nearest;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,7 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpeningHours {
+public class OpeningHours
+{
 
     @SerializedName("open_now")
     @Expose
@@ -20,7 +21,8 @@ public class OpeningHours {
      * @return
      * The openNow
      */
-    public Boolean getOpenNow() {
+    public Boolean getOpenNow()
+    {
         return openNow;
     }
 
@@ -29,7 +31,8 @@ public class OpeningHours {
      * @param openNow
      * The open_now
      */
-    public void setOpenNow(Boolean openNow) {
+    public void setOpenNow(Boolean openNow)
+    {
         this.openNow = openNow;
     }
 
@@ -38,7 +41,8 @@ public class OpeningHours {
      * @return
      * The weekdayText
      */
-    public List<Object> getWeekdayText() {
+    public List<Object> getWeekdayText()
+    {
         return weekdayText;
     }
 
@@ -47,7 +51,8 @@ public class OpeningHours {
      * @param weekdayText
      * The weekday_text
      */
-    public void setWeekdayText(List<Object> weekdayText) {
+    public void setWeekdayText(List<Object> weekdayText)
+    {
         this.weekdayText = weekdayText;
     }
 

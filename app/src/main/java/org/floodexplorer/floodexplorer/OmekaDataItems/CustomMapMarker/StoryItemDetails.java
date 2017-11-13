@@ -9,6 +9,11 @@ import java.io.Serializable;
  * Created by mgilge on 10/5/17.
  */
 
+/*
+    Ideally this would be abstract and would utilize a factory pattern or similar approach to allow for different types of files that could be associated
+    with stories. (IE images, audio, video, etc...)
+ */
+
 public class StoryItemDetails implements Serializable
 {
     private String fileName;

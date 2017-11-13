@@ -1,10 +1,6 @@
 package org.floodexplorer.floodexplorer.Activities;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -18,11 +14,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.floodexplorer.floodexplorer.AppConfiguration;
+import org.floodexplorer.floodexplorer.SupportingFiles.TouchImageView;
+import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
 import org.floodexplorer.floodexplorer.R;
-
-import java.util.ArrayList;
 
 /**
  * Created by mgilge on 10/3/17.
@@ -30,19 +25,11 @@ import java.util.ArrayList;
 
 public class PictureDialog extends DialogFragment
 {
-    private ImageView imageView;
-    private ImageView dialogImageView;
+    private TouchImageView dialogImageView;
     private TextView txtImageTitle;
     private TextView txtImageCaption;
     private StoryItemDetails storyItem;
-    private ArrayList<ImageView> imageList;
     private RelativeLayout.LayoutParams layoutParams;
-    private Context context;
-
-    public PictureDialog() //this should be done in a fragment bundle......
-    {
-       // this.layoutParams = new RelativeLayout.LayoutParams(1000,1000);
-    }
 
     public static PictureDialog newInstance(ImageView imageView)
     {
@@ -74,8 +61,8 @@ public class PictureDialog extends DialogFragment
                 dismiss();
             }
         });
-        this.layoutParams = new RelativeLayout.LayoutParams(1000,1000);
-        this.dialogImageView = (ImageView) rootView.findViewById(R.id.dialogImage);
+        this.layoutParams = new RelativeLayout.LayoutParams(1000, 1000);
+        this.dialogImageView = (TouchImageView) rootView.findViewById(R.id.dialogImage);
         this.txtImageTitle = (TextView) rootView.findViewById(R.id.txtImageTitle);
         this.txtImageCaption = (TextView) rootView.findViewById(R.id.txtImageCaption);
         this.setStoryItemData();
@@ -119,15 +106,12 @@ public class PictureDialog extends DialogFragment
 
         Picasso.with(getContext())
                 .load(AppConfiguration.URL_IMAGES_ORIGINAL + fileName)
-                //.resize(250,250) //will resize the original to square which makes everything render nice.....this needs work, What I want to do next is make two lists, one resized that is displayed, and another that is the original for the picture dialog....
-                //.centerInside()  //goes with aboive....and causes some additional problems
                 .into(dialogImageView);
     }
 
 
     private void setStoryItemData()
     {
-        //this.dialogImageView.setImageDrawable(imageView.getDrawable());
         buildImagePicasso();
         this.configureImageView();
         this.txtImageTitle.setText(storyItem.getFileTitle());
@@ -137,6 +121,6 @@ public class PictureDialog extends DialogFragment
     private void configureImageView()
     {
         this.dialogImageView.setLayoutParams(layoutParams);
-        this.dialogImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+       // this.dialogImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
     }
 }

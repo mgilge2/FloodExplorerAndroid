@@ -1,19 +1,13 @@
 package org.floodexplorer.floodexplorer.Activities.StoryTab;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ProgressBar;
-import android.widget.TabHost;
 import android.widget.TextView;
 
-import org.floodexplorer.floodexplorer.AppConfiguration;
-import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PicRayAdapter;
+import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.R;
 
@@ -53,7 +47,10 @@ public class StoryTabStory extends Fragment
         return view;
     }
 
-
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void readArgumentsBundle(Bundle bundle)
     {

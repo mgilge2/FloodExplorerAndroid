@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Nearest;
+package org.floodexplorer.floodexplorer.POJO.Nearest;
 
 /**
  * Created by mgilge on 7/20/17.
@@ -30,7 +30,8 @@ public class NearestExample
      * @return
      * The htmlAttributions
      */
-    public List<Object> getHtmlAttributions() {
+    public List<Object> getHtmlAttributions()
+    {
         return htmlAttributions;
     }
 
@@ -39,7 +40,8 @@ public class NearestExample
      * @param htmlAttributions
      * The html_attributions
      */
-    public void setHtmlAttributions(List<Object> htmlAttributions) {
+    public void setHtmlAttributions(List<Object> htmlAttributions)
+    {
         this.htmlAttributions = htmlAttributions;
     }
 
@@ -48,7 +50,8 @@ public class NearestExample
      * @return
      * The nextPageToken
      */
-    public String getNextPageToken() {
+    public String getNextPageToken()
+    {
         return nextPageToken;
     }
 
@@ -57,7 +60,8 @@ public class NearestExample
      * @param nextPageToken
      * The next_page_token
      */
-    public void setNextPageToken(String nextPageToken) {
+    public void setNextPageToken(String nextPageToken)
+    {
         this.nextPageToken = nextPageToken;
     }
 
@@ -66,7 +70,8 @@ public class NearestExample
      * @return
      * The results
      */
-    public List<Result> getResults() {
+    public List<Result> getResults()
+    {
         return results;
     }
 
@@ -75,7 +80,8 @@ public class NearestExample
      * @param results
      * The results
      */
-    public void setResults(List<Result> results) {
+    public void setResults(List<Result> results)
+    {
         this.results = results;
     }
 
@@ -84,7 +90,8 @@ public class NearestExample
      * @return
      * The status
      */
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
@@ -93,7 +100,8 @@ public class NearestExample
      * @param status
      * The status
      */
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
 

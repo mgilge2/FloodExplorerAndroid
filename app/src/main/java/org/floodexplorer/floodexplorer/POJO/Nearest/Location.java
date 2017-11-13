@@ -1,9 +1,10 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Nearest;
+package org.floodexplorer.floodexplorer.POJO.Nearest;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Location {
+public class Location
+{
 
     @SerializedName("lat")
     @Expose
@@ -17,7 +18,8 @@ public class Location {
      * @return
      * The lat
      */
-    public Double getLat() {
+    public Double getLat()
+    {
         return lat;
     }
 
@@ -26,7 +28,8 @@ public class Location {
      * @param lat
      * The lat
      */
-    public void setLat(Double lat) {
+    public void setLat(Double lat)
+    {
         this.lat = lat;
     }
 
@@ -35,7 +38,8 @@ public class Location {
      * @return
      * The lng
      */
-    public Double getLng() {
+    public Double getLng()
+    {
         return lng;
     }
 
@@ -44,7 +48,8 @@ public class Location {
      * @param lng
      * The lng
      */
-    public void setLng(Double lng) {
+    public void setLng(Double lng)
+    {
         this.lng = lng;
     }
 

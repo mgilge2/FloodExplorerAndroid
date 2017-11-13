@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer;
+package org.floodexplorer.floodexplorer.SupportingFiles;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -43,10 +43,10 @@ public class OmekaRestLoader extends AsyncTaskLoader
     public ArrayList<String> loadInBackground()
     {
         HttpRequestHandler rh = new HttpRequestHandler();
-        omekaRestGeoResults = rh.sendGetRequest(RESTConfig.REST_URL_GEOLOC); //Using Omeka Rest
-        omekaRestItemResults = rh.sendGetRequest(RESTConfig.REST_URL_ITEMS); //Using Omeka Rest
-        omekaRestFilesResults = rh.sendGetRequest(RESTConfig.REST_URL_FILES); //not using REST, our own SQL and JSON
-        sqlQueryHomeResults = rh.sendGetRequest(RESTConfig.REST_SIMPLE_PAGES); //not using REST, our own SQL and JSON
+        omekaRestGeoResults = rh.sendGetRequest(RESTConfiguration.REST_URL_GEOLOC); //Using Omeka Rest
+        omekaRestItemResults = rh.sendGetRequest(RESTConfiguration.REST_URL_ITEMS); //Using Omeka Rest
+        omekaRestFilesResults = rh.sendGetRequest(RESTConfiguration.REST_URL_FILES); //not using REST, our own SQL and JSON
+        sqlQueryHomeResults = rh.sendGetRequest(RESTConfiguration.REST_SIMPLE_PAGES); //not using REST, our own SQL and JSON
 
         omekaRestResults = new ArrayList<String>();
         omekaRestResults.add(omekaRestGeoResults);
@@ -56,7 +56,4 @@ public class OmekaRestLoader extends AsyncTaskLoader
 
         return omekaRestResults;
     }
-
-
-
 }

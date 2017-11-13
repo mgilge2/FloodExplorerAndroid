@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-import org.floodexplorer.floodexplorer.AppConfiguration;
+import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by mgilge on 7/18/17.
  * this class could be extended to store all of the data downloaded from the database
  * in other words we can make an object that follows these guidlines and store all data associated
- * with a sepcific item within this class
+ * with a sepcific item within this class <-  We did just this!
  */
 
 public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
@@ -25,10 +25,8 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
     private String mSnippet;
     private String storyText;
     private double zoom;
-    private ArrayList<StoryItemDetails> fileList;
+    private ArrayList<StoryItemDetails> fileList;  //see note in StoryItemDetails about making this abstract to increase file type handling....
     private int id;
-
-
     private String storyResources;
 
     public CustomMapMarker(double lat, double lng)
@@ -37,7 +35,6 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
         this.mPosition = new LatLng(lat, lng);
         this.fileList = new ArrayList<StoryItemDetails>();
     }
-
 
     public CustomMapMarker(double lat, double lng, String title, String snippet)
     {

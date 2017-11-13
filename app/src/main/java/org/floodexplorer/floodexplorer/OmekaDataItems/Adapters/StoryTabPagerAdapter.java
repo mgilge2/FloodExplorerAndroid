@@ -1,11 +1,13 @@
-package org.floodexplorer.floodexplorer.Activities.StoryTab;
+package org.floodexplorer.floodexplorer.OmekaDataItems.Adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
 
+import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabImages;
+import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabMap;
+import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabStory;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 
 /**
@@ -18,15 +20,15 @@ public class StoryTabPagerAdapter extends FragmentStatePagerAdapter
     private String tabtitles[] = new String[] { "Story", "Pictures", "Map" };
     private CustomMapMarker customMapMarker;
     private StoryTabStory storyTabStory;
-    private StoryTabImages storyTabImages;
     private StoryTabMap storyTabMap;
+    private StoryTabImages storyImagesList;
 
-    public StoryTabPagerAdapter(FragmentManager fm, CustomMapMarker customMapMarker)
+    public StoryTabPagerAdapter(FragmentManager fm, CustomMapMarker customMapMarker, Context context)
     {
         super(fm);
         this.customMapMarker = customMapMarker;
         this.storyTabStory = StoryTabStory.newInstance(customMapMarker);
-        this.storyTabImages = StoryTabImages.newInstance(customMapMarker);
+        this.storyImagesList = StoryTabImages.newInstance(customMapMarker);
         this.storyTabMap = StoryTabMap.newInstance(customMapMarker);
     }
 
@@ -40,13 +42,14 @@ public class StoryTabPagerAdapter extends FragmentStatePagerAdapter
                 fragment = storyTabStory;
                 break;
             case 1:
-                fragment = storyTabImages;
+                //fragment = storyTabImages;
+                fragment = storyImagesList;
                 break;
             case 2:
                 fragment = storyTabMap;
                 break;
         }
-        return fragment; //error if this happens...it shouldnt
+        return fragment;
     }
 
 

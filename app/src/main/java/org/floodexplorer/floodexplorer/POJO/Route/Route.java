@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route;
+package org.floodexplorer.floodexplorer.POJO.Route;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -21,7 +21,8 @@ public class Route
      * @return
      * The legs
      */
-    public List<Leg> getLegs() {
+    public List<Leg> getLegs()
+    {
         return legs;
     }
 
@@ -30,7 +31,8 @@ public class Route
      * @param legs
      * The legs
      */
-    public void setLegs(List<Leg> legs) {
+    public void setLegs(List<Leg> legs)
+    {
         this.legs = legs;
     }
 
@@ -39,7 +41,8 @@ public class Route
      * @return
      * The overviewPolyline
      */
-    public OverviewPolyline getOverviewPolyline() {
+    public OverviewPolyline getOverviewPolyline()
+    {
         return overviewPolyline;
     }
 
@@ -48,7 +51,8 @@ public class Route
      * @param overviewPolyline
      * The overview_polyline
      */
-    public void setOverviewPolyline(OverviewPolyline overviewPolyline) {
+    public void setOverviewPolyline(OverviewPolyline overviewPolyline)
+    {
         this.overviewPolyline = overviewPolyline;
     }
 

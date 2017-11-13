@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Nearest;
+package org.floodexplorer.floodexplorer.POJO.Nearest;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,7 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Result {
+public class Result
+{
 
     @SerializedName("geometry")
     @Expose
@@ -53,7 +54,8 @@ public class Result {
      * @return
      * The geometry
      */
-    public Geometry getGeometry() {
+    public Geometry getGeometry()
+    {
         return geometry;
     }
 
@@ -62,7 +64,8 @@ public class Result {
      * @param geometry
      * The geometry
      */
-    public void setGeometry(Geometry geometry) {
+    public void setGeometry(Geometry geometry)
+    {
         this.geometry = geometry;
     }
 
@@ -71,7 +74,8 @@ public class Result {
      * @return
      * The icon
      */
-    public String getIcon() {
+    public String getIcon()
+    {
         return icon;
     }
 
@@ -80,7 +84,8 @@ public class Result {
      * @param icon
      * The icon
      */
-    public void setIcon(String icon) {
+    public void setIcon(String icon)
+    {
         this.icon = icon;
     }
 
@@ -89,7 +94,8 @@ public class Result {
      * @return
      * The id
      */
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
@@ -98,7 +104,8 @@ public class Result {
      * @param id
      * The id
      */
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
@@ -107,7 +114,8 @@ public class Result {
      * @return
      * The name
      */
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
@@ -116,7 +124,8 @@ public class Result {
      * @param name
      * The name
      */
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
@@ -125,7 +134,8 @@ public class Result {
      * @return
      * The openingHours
      */
-    public OpeningHours getOpeningHours() {
+    public OpeningHours getOpeningHours()
+    {
         return openingHours;
     }
 
@@ -134,7 +144,8 @@ public class Result {
      * @param openingHours
      * The opening_hours
      */
-    public void setOpeningHours(OpeningHours openingHours) {
+    public void setOpeningHours(OpeningHours openingHours)
+    {
         this.openingHours = openingHours;
     }
 
@@ -143,7 +154,8 @@ public class Result {
      * @return
      * The photos
      */
-    public List<Photo> getPhotos() {
+    public List<Photo> getPhotos()
+    {
         return photos;
     }
 
@@ -152,7 +164,8 @@ public class Result {
      * @param photos
      * The photos
      */
-    public void setPhotos(List<Photo> photos) {
+    public void setPhotos(List<Photo> photos)
+    {
         this.photos = photos;
     }
 
@@ -161,7 +174,8 @@ public class Result {
      * @return
      * The placeId
      */
-    public String getPlaceId() {
+    public String getPlaceId()
+    {
         return placeId;
     }
 
@@ -170,7 +184,8 @@ public class Result {
      * @param placeId
      * The place_id
      */
-    public void setPlaceId(String placeId) {
+    public void setPlaceId(String placeId)
+    {
         this.placeId = placeId;
     }
 
@@ -179,7 +194,8 @@ public class Result {
      * @return
      * The rating
      */
-    public Double getRating() {
+    public Double getRating()
+    {
         return rating;
     }
 
@@ -188,7 +204,8 @@ public class Result {
      * @param rating
      * The rating
      */
-    public void setRating(Double rating) {
+    public void setRating(Double rating)
+    {
         this.rating = rating;
     }
 
@@ -197,7 +214,8 @@ public class Result {
      * @return
      * The reference
      */
-    public String getReference() {
+    public String getReference()
+    {
         return reference;
     }
 
@@ -206,7 +224,8 @@ public class Result {
      * @param reference
      * The reference
      */
-    public void setReference(String reference) {
+    public void setReference(String reference)
+    {
         this.reference = reference;
     }
 
@@ -215,7 +234,8 @@ public class Result {
      * @return
      * The scope
      */
-    public String getScope() {
+    public String getScope()
+    {
         return scope;
     }
 
@@ -224,7 +244,8 @@ public class Result {
      * @param scope
      * The scope
      */
-    public void setScope(String scope) {
+    public void setScope(String scope)
+    {
         this.scope = scope;
     }
 
@@ -233,7 +254,8 @@ public class Result {
      * @return
      * The types
      */
-    public List<String> getTypes() {
+    public List<String> getTypes()
+    {
         return types;
     }
 
@@ -242,7 +264,8 @@ public class Result {
      * @param types
      * The types
      */
-    public void setTypes(List<String> types) {
+    public void setTypes(List<String> types)
+    {
         this.types = types;
     }
 
@@ -251,7 +274,8 @@ public class Result {
      * @return
      * The vicinity
      */
-    public String getVicinity() {
+    public String getVicinity()
+    {
         return vicinity;
     }
 
@@ -260,7 +284,8 @@ public class Result {
      * @param vicinity
      * The vicinity
      */
-    public void setVicinity(String vicinity) {
+    public void setVicinity(String vicinity)
+    {
         this.vicinity = vicinity;
     }
 
@@ -269,7 +294,8 @@ public class Result {
      * @return
      * The priceLevel
      */
-    public Integer getPriceLevel() {
+    public Integer getPriceLevel()
+    {
         return priceLevel;
     }
 
@@ -278,7 +304,8 @@ public class Result {
      * @param priceLevel
      * The price_level
      */
-    public void setPriceLevel(Integer priceLevel) {
+    public void setPriceLevel(Integer priceLevel)
+    {
         this.priceLevel = priceLevel;
     }
 

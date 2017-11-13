@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer;
+package org.floodexplorer.floodexplorer.SupportingFiles;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,13 +26,15 @@ public class HttpRequestHandler
     //This method is taking two arguments
     //First argument is the URL of the script to which we will send the request
     //Other is an HashMap with name value pairs containing the data to be send with the request
-    public String sendPostRequest(String requestURL, HashMap<String, String> postDataParams) {
+    public String sendPostRequest(String requestURL, HashMap<String, String> postDataParams)
+    {
         //Creating a URL
         URL url;
 
         //StringBuilder object to store the message retrieved from the server
         StringBuilder sb = new StringBuilder();
-        try {
+        try
+        {
             //Initializing Url
             url = new URL(requestURL);
 
@@ -60,35 +62,45 @@ public class HttpRequestHandler
             os.close();
             int responseCode = conn.getResponseCode();
 
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
+            if (responseCode == HttpsURLConnection.HTTP_OK)
+            {
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 sb = new StringBuilder();
                 String response;
                 //Reading server response
-                while ((response = br.readLine()) != null){
+                while ((response = br.readLine()) != null)
+                {
                     sb.append(response);
                 }
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         return sb.toString();
     }
 
-    public String sendGetRequest(String requestURL){
+    public String sendGetRequest(String requestURL)
+    {
         StringBuilder sb =new StringBuilder();
-        try {
+        try
+        {
             URL url = new URL(requestURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
             String s;
-            while((s=bufferedReader.readLine())!=null){
+            while((s=bufferedReader.readLine())!=null)
+            {
                 sb.append(s+"\n");
             }
-        }catch(Exception e){
+        }
+        catch(Exception e)
+        {
+            //handle...
         }
         return sb.toString();
     }
@@ -96,16 +108,21 @@ public class HttpRequestHandler
     public String sendGetRequestParam(String requestURL, String id)
     {
         StringBuilder sb =new StringBuilder();
-        try {
+        try
+        {
             URL url = new URL(requestURL+id);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
             String s;
-            while((s=bufferedReader.readLine())!=null){
+            while((s=bufferedReader.readLine())!=null)
+            {
                 sb.append(s+"\n");
             }
-        }catch(Exception e){
+        }
+        catch(Exception e)
+        {
+            //handle
         }
         return sb.toString();
     }
@@ -114,7 +131,8 @@ public class HttpRequestHandler
     {
         StringBuilder result = new StringBuilder();
         boolean first = true;
-        for (Map.Entry<String, String> entry : params.entrySet()) {
+        for (Map.Entry<String, String> entry : params.entrySet())
+        {
             if (first)
                 first = false;
             else

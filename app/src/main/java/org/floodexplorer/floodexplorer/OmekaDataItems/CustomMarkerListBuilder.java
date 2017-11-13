@@ -5,7 +5,7 @@ import android.text.Spanned;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
-import org.floodexplorer.floodexplorer.RESTConfig;
+import org.floodexplorer.floodexplorer.SupportingFiles.RESTConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 /**
  * Created by mgilge on 10/18/17.
+ * This should be thought of as the builder for my custom data class as the clustering markers built for this app will work for anything
+ * with similar data and is not specific to Omeka itself...
  */
 
 public class CustomMarkerListBuilder
@@ -44,7 +46,7 @@ public class CustomMarkerListBuilder
             for(int x = 0; x < jsonArray.length(); x++)
             {
                 JSONObject object = jsonArray.getJSONObject(x);
-                results += object.getString(RESTConfig.TAG_TEXT);
+                results += object.getString(RESTConfiguration.TAG_TEXT);
             }
             //replace all occurrences of one or more HTML tags with optional
             // whitespace inbetween with a single space character
@@ -59,6 +61,11 @@ public class CustomMarkerListBuilder
         }
         return ret;
     }
+
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
 
     private void parseRESTJsonResults()
     {
@@ -83,11 +90,11 @@ public class CustomMarkerListBuilder
             for(int x = 0; x <  locationsArray.length(); x ++)
             {
                 JSONObject locObject = locationsArray.getJSONObject(x);
-                double latitude = locObject.getDouble(RESTConfig.TAG_LAT);
-                double longitude = locObject.getDouble(RESTConfig.TAG_LONG);
-                JSONObject locItem = locObject.getJSONObject(RESTConfig.TAG_ITEM);
-                float zoom = locObject.getInt(RESTConfig.TAG_ZOOM);
-                int locId = locItem.getInt(RESTConfig.TAG_ID);
+                double latitude = locObject.getDouble(RESTConfiguration.TAG_LAT);
+                double longitude = locObject.getDouble(RESTConfiguration.TAG_LONG);
+                JSONObject locItem = locObject.getJSONObject(RESTConfiguration.TAG_ITEM);
+                float zoom = locObject.getInt(RESTConfiguration.TAG_ZOOM);
+                int locId = locItem.getInt(RESTConfiguration.TAG_ID);
                 String title = "";
                 String storyText = "\t\t\t\t";
                 String snippet = "";
@@ -96,25 +103,25 @@ public class CustomMarkerListBuilder
                 for(int y = 0; y < itemTextsArray.length(); y ++)
                 {
                     JSONObject itemTextObject = itemTextsArray.getJSONObject(y);
-                    int itemElementID = itemTextObject.getInt(RESTConfig.TAG_ID);
-                    JSONArray itemElementTexts = itemTextObject.getJSONArray(RESTConfig.TAG_ELEMENT_TEXTS);
+                    int itemElementID = itemTextObject.getInt(RESTConfiguration.TAG_ID);
+                    JSONArray itemElementTexts = itemTextObject.getJSONArray(RESTConfiguration.TAG_ELEMENT_TEXTS);
                     for(int index = 0; index < itemElementTexts.length(); index ++)
                     {
                         JSONObject itemElement = itemElementTexts.getJSONObject(index);
-                        JSONObject obj = itemElement.getJSONObject(RESTConfig.TAG_ELEMENT_SET);
+                        JSONObject obj = itemElement.getJSONObject(RESTConfiguration.TAG_ELEMENT_SET);
                         if(itemElementID == locId)
                         {
                             if(index == 0)
                             {
-                                title = itemElement.getString(RESTConfig.TAG_TEXT);
+                                title = itemElement.getString(RESTConfiguration.TAG_TEXT);
                             }
                             else if(index == 3)
                             {
-                                resources += itemElement.getString(RESTConfig.TAG_TEXT);
+                                resources += itemElement.getString(RESTConfiguration.TAG_TEXT);
                             }
                             else
                             {
-                                String str =  itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";
+                                String str =  itemElement.getString(RESTConfiguration.TAG_TEXT) +"\n\n";
                                 String split[] = str.split("\\s+");
                                 if(split.length <= 1 )
                                 {
@@ -124,11 +131,11 @@ public class CustomMarkerListBuilder
                                 {
                                     if(split.length <= 5)
                                     {
-                                        snippet = itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";
+                                        snippet = itemElement.getString(RESTConfiguration.TAG_TEXT) +"\n\n";
                                     }
                                     else
                                     {
-                                        storyText += itemElement.getString(RESTConfig.TAG_TEXT) +"\n\n";  //this is where we need to deal with getting things specific such as author and sources
+                                        storyText += itemElement.getString(RESTConfiguration.TAG_TEXT) +"\n\n";  //this is where we need to deal with getting things specific such as author and sources
                                     }
                                 }
                             }
@@ -160,18 +167,18 @@ public class CustomMarkerListBuilder
             {
                 String results = "";
                 JSONObject object = filesArray.getJSONObject(x);
-                String fileName = object.getString(RESTConfig.TAG_FILENAME);
+                String fileName = object.getString(RESTConfiguration.TAG_FILENAME);
 
-                JSONObject item = object.getJSONObject(RESTConfig.TAG_ITEM);
-                int id = item.getInt(RESTConfig.TAG_ID);
+                JSONObject item = object.getJSONObject(RESTConfiguration.TAG_ITEM);
+                int id = item.getInt(RESTConfiguration.TAG_ID);
 
-                JSONArray array = object.getJSONArray(RESTConfig.TAG_ELEMENT_TEXTS);
+                JSONArray array = object.getJSONArray(RESTConfiguration.TAG_ELEMENT_TEXTS);
                 String picTitle = "";
                 ArrayList<String> list = new ArrayList<String>();
                 for(int y = 0; y < array.length(); y++)
                 {
                     JSONObject obj = array.getJSONObject(y);
-                    list.add(obj.getString(RESTConfig.TAG_TEXT));
+                    list.add(obj.getString(RESTConfiguration.TAG_TEXT));
                 }
 
                 for(int index = 0; index < list.size(); index ++)
@@ -218,6 +225,10 @@ public class CustomMarkerListBuilder
             ret = true;
         }
         if(fileName.matches("(.*)png"))
+        {
+            ret = true;
+        }
+        if(fileName.matches("(.*)PNG"))
         {
             ret = true;
         }

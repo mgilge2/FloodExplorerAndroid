@@ -1,9 +1,10 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route;
+package org.floodexplorer.floodexplorer.POJO.Route;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class OverviewPolyline {
+public class OverviewPolyline
+{
 
     @SerializedName("points")
     @Expose
@@ -14,7 +15,8 @@ public class OverviewPolyline {
      * @return
      * The points
      */
-    public String getPoints() {
+    public String getPoints()
+    {
         return points;
     }
 
@@ -23,7 +25,8 @@ public class OverviewPolyline {
      * @param points
      * The points
      */
-    public void setPoints(String points) {
+    public void setPoints(String points)
+    {
         this.points = points;
     }
 

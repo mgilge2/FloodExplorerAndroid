@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Nearest;
+package org.floodexplorer.floodexplorer.POJO.Nearest;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,7 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Photo {
+public class Photo
+{
 
     @SerializedName("height")
     @Expose
@@ -26,7 +27,8 @@ public class Photo {
      * @return
      * The height
      */
-    public Integer getHeight() {
+    public Integer getHeight()
+    {
         return height;
     }
 
@@ -35,7 +37,8 @@ public class Photo {
      * @param height
      * The height
      */
-    public void setHeight(Integer height) {
+    public void setHeight(Integer height)
+    {
         this.height = height;
     }
 
@@ -44,7 +47,8 @@ public class Photo {
      * @return
      * The htmlAttributions
      */
-    public List<String> getHtmlAttributions() {
+    public List<String> getHtmlAttributions()
+    {
         return htmlAttributions;
     }
 
@@ -53,7 +57,8 @@ public class Photo {
      * @param htmlAttributions
      * The html_attributions
      */
-    public void setHtmlAttributions(List<String> htmlAttributions) {
+    public void setHtmlAttributions(List<String> htmlAttributions)
+    {
         this.htmlAttributions = htmlAttributions;
     }
 
@@ -62,7 +67,8 @@ public class Photo {
      * @return
      * The photoReference
      */
-    public String getPhotoReference() {
+    public String getPhotoReference()
+    {
         return photoReference;
     }
 
@@ -71,7 +77,8 @@ public class Photo {
      * @param photoReference
      * The photo_reference
      */
-    public void setPhotoReference(String photoReference) {
+    public void setPhotoReference(String photoReference)
+    {
         this.photoReference = photoReference;
     }
 
@@ -80,7 +87,8 @@ public class Photo {
      * @return
      * The width
      */
-    public Integer getWidth() {
+    public Integer getWidth()
+    {
         return width;
     }
 
@@ -89,7 +97,8 @@ public class Photo {
      * @param width
      * The width
      */
-    public void setWidth(Integer width) {
+    public void setWidth(Integer width)
+    {
         this.width = width;
     }
 

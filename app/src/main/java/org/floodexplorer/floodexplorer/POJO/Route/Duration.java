@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route;
+package org.floodexplorer.floodexplorer.POJO.Route;
 /*
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -37,7 +37,8 @@ public class Duration {
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Duration {
+public class Duration
+{
 
     @SerializedName("text")
     @Expose
@@ -51,7 +52,8 @@ public class Duration {
      * @return
      * The text
      */
-    public String getText() {
+    public String getText()
+    {
         return text;
     }
 
@@ -60,7 +62,8 @@ public class Duration {
      * @param text
      * The text
      */
-    public void setText(String text) {
+    public void setText(String text)
+    {
         this.text = text;
     }
 
@@ -69,7 +72,8 @@ public class Duration {
      * @return
      * The value
      */
-    public Integer getValue() {
+    public Integer getValue()
+    {
         return value;
     }
 
@@ -78,7 +82,8 @@ public class Duration {
      * @param value
      * The value
      */
-    public void setValue(Integer value) {
+    public void setValue(Integer value)
+    {
         this.value = value;
     }
 

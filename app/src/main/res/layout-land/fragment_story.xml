@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTab">
+    tools:context="org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabFragment">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"

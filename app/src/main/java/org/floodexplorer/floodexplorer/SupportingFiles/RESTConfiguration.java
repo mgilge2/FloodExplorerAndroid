@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer;
+package org.floodexplorer.floodexplorer.SupportingFiles;
 
 import java.security.PublicKey;
 
@@ -6,7 +6,7 @@ import java.security.PublicKey;
  * Created by mgilge on 10/15/17.
  */
 
-public class RESTConfig
+public class RESTConfiguration
 {
 
     /*
@@ -21,14 +21,6 @@ public class RESTConfig
     public static final String REST_URL_FILES = "http://floodexplorer.org/api/files";
     public static final String REST_URL_GEOLOC = "http://floodexplorer.org/api/geolocations";
     public static final String REST_SIMPLE_PAGES = "http://floodexplorer.org/api/simple_pages";
-
-    /*
-    //Web addresses for REST -- HEY, HOW'D THIS GET HERE !?!
-    public static final String REST_URL_ITEMS = "http://www.spokanehistorical.org/api/items";
-    public static final String REST_URL_FILES = "http://www.spokanehistorical.org/api/files";
-    public static final String REST_URL_GEOLOC = "http://www.spokanehistorical.org/api/geolocations";
-    public static final String REST_SIMPLE_PAGES = "http://www.spokanehistorical.org/api/simple_pages";
-*/
 
     //Tags for JSON parsing of REST results
     public static final String TAG_LAT = "latitude";

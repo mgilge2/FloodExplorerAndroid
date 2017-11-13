@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +29,14 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
-import org.floodexplorer.floodexplorer.AppConfiguration;
+import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabFragment;
+import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PinInfoViewAdapter;
-import org.floodexplorer.floodexplorer.OmekaDataItems.POJO.Route.RouteExample;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.MapPinInfoAdapter;
+import org.floodexplorer.floodexplorer.POJO.Route.RouteExample;
 import org.floodexplorer.floodexplorer.R;
-import org.floodexplorer.floodexplorer.OmekaDataItems.RetrofitMapsRoute;
+import org.floodexplorer.floodexplorer.SupportingFiles.RetrofitMapsRoute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +64,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     private Location location;
     private Polyline line;
     private TextView ShowDistanceDuration;
-    private Marker saveMarker;
 
     public static MapsFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
     {
@@ -83,11 +81,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         readArgumentsBundle(getArguments());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-       // this.setNavigationTitle();
 
+        final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        myMAPF.getMapAsync(this);
 
-            final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-            myMAPF.getMapAsync(this);
 
             this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
             this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
@@ -108,7 +105,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                             button.setText("Driving");
                             break;
                     }
-                    //mapLogic.buildRoute("walking");
                 }
             });
         setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
@@ -152,14 +148,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         {
             this.omekaDataItems = bundle.getParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
         }
-    }
-
-    private void setNavigationTitle()
-    {
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        View view = actionBar.getCustomView();
-       // TextView textView = (TextView) view.findViewById(R.id.navTitleTxt);
-        //textView.setText("Map");
     }
 
     private void initNewMap()
@@ -235,7 +223,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
         mClusterManager.setRenderer(new CustomClusterRenderer(getContext(), googleMap, mClusterManager)); //see CustomColorRender class for more, this is used to control cluster icon
 
-        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new PinInfoViewAdapter(LayoutInflater.from(getContext()), omekaDataItems));
+        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new MapPinInfoAdapter(LayoutInflater.from(getContext()), omekaDataItems));
         googleMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
     }
 

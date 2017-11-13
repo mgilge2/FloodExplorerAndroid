@@ -1,5 +1,8 @@
 package org.floodexplorer.floodexplorer.Activities;
 
+/*
+This is just a loading screen that is displayed until the initial REST request is completed
+ */
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -20,10 +23,6 @@ public class LoadingScreenFragment extends Fragment
     {
         LoadingScreenFragment fragment = new LoadingScreenFragment();
         return fragment;
-    }
-
-    public LoadingScreenFragment() {
-        // Required empty public constructor
     }
 
     @Override

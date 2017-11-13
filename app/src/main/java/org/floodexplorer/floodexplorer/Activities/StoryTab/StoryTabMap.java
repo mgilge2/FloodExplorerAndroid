@@ -17,8 +17,8 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
-import org.floodexplorer.floodexplorer.AppConfiguration;
-import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.PinInfoViewAdapter;
+import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.MapPinInfoAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.R;
@@ -60,6 +60,11 @@ public class StoryTabMap extends Fragment implements OnMapReadyCallback
         this.initMap();
     }
 
+    //*******************************************************************
+    //  Private Implementation Below Here....
+    //
+    //*******************************************************************
+
     private void readArgumentsBundle(Bundle bundle)
     {
         if(bundle != null)
@@ -89,16 +94,7 @@ public class StoryTabMap extends Fragment implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker)
             {
-                //   if(prevMarker != null)
-                // {
-                //      prevMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                //  }
-                //   if(!marker.equals(prevMarker))
-                //  {
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                //      prevMarker = marker;
-                //     }
-                //  prevMarker = marker;
                 return super.onMarkerClick(marker);
             }
         });
@@ -128,7 +124,7 @@ public class StoryTabMap extends Fragment implements OnMapReadyCallback
 
         mClusterManager.setRenderer(new CustomClusterRenderer(getContext(), googleMap, mClusterManager)); //see CustomColorRender class for more, this is used to control cluster icon
 
-        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new PinInfoViewAdapter(LayoutInflater.from(getContext())));
+        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new MapPinInfoAdapter(LayoutInflater.from(getContext())));
         googleMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
     }
 
