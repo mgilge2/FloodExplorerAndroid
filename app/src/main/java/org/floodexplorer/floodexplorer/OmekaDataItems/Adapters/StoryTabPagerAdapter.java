@@ -18,7 +18,6 @@ public class StoryTabPagerAdapter extends FragmentStatePagerAdapter
 {
 
     private String tabtitles[] = new String[] { "Story", "Pictures", "Map" };
-    private CustomMapMarker customMapMarker;
     private StoryTabStory storyTabStory;
     private StoryTabMap storyTabMap;
     private StoryTabImages storyImagesList;
@@ -26,7 +25,6 @@ public class StoryTabPagerAdapter extends FragmentStatePagerAdapter
     public StoryTabPagerAdapter(FragmentManager fm, CustomMapMarker customMapMarker, Context context)
     {
         super(fm);
-        this.customMapMarker = customMapMarker;
         this.storyTabStory = StoryTabStory.newInstance(customMapMarker);
         this.storyImagesList = StoryTabImages.newInstance(customMapMarker);
         this.storyTabMap = StoryTabMap.newInstance(customMapMarker);
@@ -42,7 +40,6 @@ public class StoryTabPagerAdapter extends FragmentStatePagerAdapter
                 fragment = storyTabStory;
                 break;
             case 1:
-                //fragment = storyTabImages;
                 fragment = storyImagesList;
                 break;
             case 2:

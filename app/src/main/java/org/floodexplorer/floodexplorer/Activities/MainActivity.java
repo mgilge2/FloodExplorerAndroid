@@ -3,6 +3,7 @@ package org.floodexplorer.floodexplorer.Activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,15 +12,20 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
@@ -28,12 +34,18 @@ import org.floodexplorer.floodexplorer.SupportingFiles.OmekaRestLoader;
 import org.floodexplorer.floodexplorer.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import mehdi.sakout.aboutpage.AboutPage;
 
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<String>>
 {
+    //This is the model for MVC....
+    private static HashMap<String, CustomMapMarker> omekaDataMap;
+
     private String homeRestResults;
-    private ArrayList<CustomMapMarker> omekaDataItems; //this is our model for MVC....
     private BottomNavigationView navigation;
     private boolean restFinished;
     private static final int locationAccess = 0;
@@ -46,8 +58,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         requestPerms();
         setContentView(R.layout.activity_main);
         this.customizeActionBar();
-        if(omekaDataItems == null);
-        this.omekaDataItems = new ArrayList<CustomMapMarker>();
+        this.omekaDataMap = new HashMap<String, CustomMapMarker>();
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
         this.initBottomNavigationView();
         this.dealWithSavedInstanceState(savedInstanceState);
@@ -57,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    //just used for crash testing....
     @Override
     protected void onPause()
     {
@@ -71,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         super.onPause();
     }
+
+
 
     //For handling the back button when pressed within a fragment....
     @Override
@@ -89,14 +103,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<ArrayList<String>> onCreateLoader(int id, Bundle args)
     {
-        if(isNetworkAvailable())
+        if(!isNetworkAvailable())
         {
-            Toast.makeText(this, "HAS INTERWEBS", Toast.LENGTH_LONG).show();
-
-        }
-        else
-        {
-            Toast.makeText(this, "NO INTERWEBS", Toast.LENGTH_LONG).show();
             noInternetDialog();
         }
 
@@ -113,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         CustomMarkerListBuilder customMarkerListBuilder = new CustomMarkerListBuilder();
         this.homeRestResults = data.get(3); //make parse be in markerbuilder... rename marker builder to be more appropriate...
         this.homeRestResults = customMarkerListBuilder.parseRestSimplePages(homeRestResults);
-        this.omekaDataItems = customMarkerListBuilder.buildOmekaDataItems(data);
+        this.omekaDataMap = customMarkerListBuilder.buildOmekaDataMap(data);
         this.setInitialNavgationTab();
         this.restFinished = true;
         navigation.setVisibility(View.VISIBLE);
@@ -136,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
             else
             {
-                this.omekaDataItems = savedInstanceState.getParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
+                this.omekaDataMap = (HashMap<String, CustomMapMarker>) savedInstanceState.getSerializable(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
                 this.homeRestResults = savedInstanceState.getString(AppConfiguration.BUNDLE_TAG_HOME_RESULTS);
             }
         }
@@ -151,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             super.onSaveInstanceState(outState);
             int selected = navigation.getSelectedItemId();
             outState.putInt(AppConfiguration.BUNDLE_TAG_NAVIGATION_LOCATION, selected);
-            outState.putParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS, omekaDataItems);
+            outState.putSerializable(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS, omekaDataMap);
             outState.putString(AppConfiguration.BUNDLE_TAG_HOME_RESULTS, homeRestResults);
             outState.putBoolean("restFinished", restFinished);
         }
@@ -161,12 +169,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    // Menu...if we want it
-/*
+    public static HashMap<String, CustomMapMarker> getOmekaDataMap()
+    {
+        return omekaDataMap;
+    }
+
+
+    // Menu...with about.....should add setting to it for things like text size in the app
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -175,19 +187,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        Fragment fragment = null;
 
         if (id == R.id.aboutMenuItem)
         {
-            Toast.makeText(this,
-                    "FloodExplorer.org Android App", Toast.LENGTH_LONG).show();
-            return true;
-
+           AboutDialog aboutDialog = new AboutDialog();
+           aboutDialog.show(getSupportFragmentManager(), "About Dialog");
+           return true;
         }
         return super.onOptionsItemSelected(item);
     }
-*/
-
 
     //*******************************************************************
     //  Private Implementation Below Here....
@@ -203,19 +211,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void customizeActionBar()     //This method will customize the bar at the top of the screen
     {
         ActionBar actionBar = getSupportActionBar();
-        //this code will set an image as the background
-        //BitmapDrawable background = new BitmapDrawable (BitmapFactory.decodeResource(getResources(), R.drawable.logomenu));
-       // actionBar.setBackgroundDrawable(background);
 
         //here we can set the color
         actionBar.setBackgroundDrawable(AppConfiguration.ActionBarColor);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.custom_action_bar_layout); //use custom XML layout for ActionBar
-       // actionBar.setDisplayShowTitleEnabled(true);
         View view = getSupportActionBar().getCustomView();
-        //can now use view to get at buttons, images and anything else we wish....
-
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener()
@@ -230,12 +232,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     fragment = HomeFragment.newInstance(homeRestResults);
                     break;
                 case R.id.navigation_stories:
-                    fragment = StoriesFragment.newInstance(omekaDataItems);
+                    fragment = new StoriesFragment();
                     break;
                 case R.id.navigation_map:
-                    fragment = MapsFragment.newInstance(omekaDataItems);
+                    fragment = new MapsFragment();
                     break;
             }
+
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE); //clear the back stack
 
             final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frameLayout, fragment);
@@ -258,7 +262,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     {
         AlertDialog.Builder internetDialog = new AlertDialog.Builder(this);
         internetDialog.setMessage("The device is not connected to the Internet \nPlease connect to the internet and reopen Flood Explorer").setTitle("No Internet Connection");
-        internetDialog.setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
+        internetDialog.setNeutralButton("Settings", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                System.exit(0);
+            }
+        });
+        internetDialog.setNegativeButton("Exit", new DialogInterface.OnClickListener()
+        {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
@@ -283,21 +297,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},locationAccess);
 
         }
-        else
-        {
-            Toast.makeText(this, "LOCATION ALREADY HAS PERMISSION", Toast.LENGTH_LONG).show();
-        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},internetAccess);
-
-        }
-        else
-        {
-            Toast.makeText(this, "INTERNET ALREADY HAS PERMISSION", Toast.LENGTH_LONG).show();
         }
     }
 
+    //this method is only for testing purposes
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
@@ -305,22 +311,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                Toast.makeText(this, "LOCATION GRANTED", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "LOCATION GRANTED", Toast.LENGTH_LONG).show();
             }
             else
             {
-                Toast.makeText(this, "location permission was NOT granted.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "location permission was NOT granted.", Toast.LENGTH_SHORT).show();
             }
         }
         if (requestCode == internetAccess)
         {
             if (grantResults[1] == PackageManager.PERMISSION_GRANTED)
             {
-                Toast.makeText(this, "INTERNET GRANTED", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "INTERNET GRANTED", Toast.LENGTH_LONG).show();
             }
             else
             {
-                Toast.makeText(this, "Internet permission was NOT granted.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Internet permission was NOT granted.", Toast.LENGTH_SHORT).show();
             }
         }
     }

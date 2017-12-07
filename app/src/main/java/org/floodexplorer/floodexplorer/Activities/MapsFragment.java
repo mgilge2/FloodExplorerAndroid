@@ -1,44 +1,42 @@
 package org.floodexplorer.floodexplorer.Activities;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.MarkerManager;
-import com.google.maps.android.clustering.Cluster;
-import com.google.maps.android.clustering.ClusterManager;
 
-import org.floodexplorer.floodexplorer.Activities.StoryTab.StoryTabFragment;
+import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterManager;
 import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomClusterRenderer;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.MapPinInfoAdapter;
-import org.floodexplorer.floodexplorer.POJO.Route.RouteExample;
+import org.floodexplorer.floodexplorer.SupportingFiles.POJO.Route.RouteExample;
 import org.floodexplorer.floodexplorer.R;
 import org.floodexplorer.floodexplorer.SupportingFiles.RetrofitMapsRoute;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit.Call;
@@ -54,69 +52,86 @@ import retrofit.Retrofit;
 public class MapsFragment extends Fragment implements OnMapReadyCallback
 {
     private GoogleMap googleMap;
-    private ArrayList<CustomMapMarker> omekaDataItems;
-    private ClusterManager<CustomMapMarker> mClusterManager;
-    private Marker selectedMarker;
+    private CustomClusterManager<CustomMapMarker> mClusterManager;
     private Button changeButton;
     private Button routeButton;
-    private LatLng myDest;
     private LatLng origin;
-    private Location location;
     private Polyline line;
-    private TextView ShowDistanceDuration;
+    private boolean firstRun = true;
+    private int selectedMapType = GoogleMap.MAP_TYPE_NORMAL;
+    private String selectedMarkerTitle = "";
+    private Context  context;
+    private  HashMap<String, CustomMapMarker> omekaDataMap;
+    private Runnable runnable;
+    private Handler handler;
+    private FusedLocationProviderClient mFusedLocationClient;
 
-    public static MapsFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
-    {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS, omekaDataItems);
-
-        MapsFragment mapsFragment = new MapsFragment();
-        mapsFragment.setArguments(bundle);
-        return mapsFragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        readArgumentsBundle(getArguments());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        this.handler = new Handler();
+        runnable = new Runnable()
+        {
+            public void run()
+            {
+                mClusterManager.displaySelectedMarkerWindow(selectedMarkerTitle);
+            }
+        };
 
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
 
-
-            this.ShowDistanceDuration = (TextView) view.findViewById(R.id.txtDist);
-            this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
-            this.routeButton = (Button) view.findViewById(R.id.btnDriveWalk);
-            routeButton.setOnClickListener(new View.OnClickListener() {
+        this.context = view.getContext();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        this.setCurrentLocation();
+        this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
+        this.routeButton = (Button) view.findViewById(R.id.btnDriveWalk);
+        this.omekaDataMap = MainActivity.getOmekaDataMap();
+        routeButton.setOnClickListener(new View.OnClickListener()
+        {
                 @Override
                 public void onClick(View v)
                 {
-                    Button button = (Button) v;
-                    switch (button.getText().toString())
+                    if(origin != null)
                     {
-                        case "Driving":
-                            buildRoute("driving");
-                            button.setText("Walking");
-                            break;
-                        case "Walking":
-                            buildRoute("walking");
-                            button.setText("Driving");
-                            break;
+                        Button button = (Button) v;
+                        switch (button.getText().toString())
+                        {
+                            case "Driving":
+                                buildRoute("driving");
+                                button.setText("Walking");
+                                break;
+                            case "Walking":
+                                buildRoute("walking");
+                                button.setText("Driving");
+                                break;
+                        }
                     }
                 }
             });
-        setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-        this.googleMap = googleMap;
-        this.initNewMap();
+        if(this.googleMap == null)
+        {
+            this.googleMap = googleMap;
+            this.initNewMap();
+        }
+        else
+        {
+            this.addChangeButtonHandler();
+        }
     }
+
 
     //Below two methods have to do with saving the selected tab when rotating...
     @Override
@@ -125,7 +140,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState != null)
         {
-            setRetainInstance(true);
+            firstRun = savedInstanceState.getBoolean("firstRun");
+            selectedMapType = savedInstanceState.getInt("selectedMapType");
+            selectedMarkerTitle = savedInstanceState.getString("selectedMarkerTitle");
         }
     }
 
@@ -133,8 +150,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         super.onSaveInstanceState(savedInstanceState);
-        //savedInstanceState.putSerializable("markerOptions", mClusterManager);
-       // savedInstanceState.putSerializable("storyItemDetails", storyItemDetailes);
+        savedInstanceState.putBoolean("firstRun", firstRun);
+        savedInstanceState.putInt("selectedMapType", selectedMapType);
+
+        if(mClusterManager.getSelectedMarker() != null)
+        {
+            savedInstanceState.putString("selectedMarkerTitle", this.mClusterManager.getSelectedMarker().getTitle());
+        }
+        else
+        {
+            savedInstanceState.putString("selectedMarkerTitle", "");
+        }
     }
 
     //*******************************************************************
@@ -142,98 +168,42 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     //
     //*******************************************************************
 
-    private void readArgumentsBundle(Bundle bundle)
-    {
-        if(bundle != null)
-        {
-            this.omekaDataItems = bundle.getParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
-        }
-    }
-
     private void initNewMap()
     {
-        this.googleMap.setMyLocationEnabled(true);
-        UiSettings uiSettings = this.googleMap.getUiSettings();
-        uiSettings.setZoomControlsEnabled(true); //adds zoom buttons on map
+        if(firstRun)
+        {
+            googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(47.47398, -118.5489564) , 6.8f) ); //set initial map zoom and location
+            firstRun = false;
+        }
+        initExistingMap();
+    }
 
-        //set the map to what the initial settings for FloodExplorer.org are, this should be placed in a settings file at the least not hardcoded here...
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(47.47398, -118.5489564) , 6.8f) ); //set initial map zoom and location
-        this.initClusterManager();
-        this.googleMap.setOnCameraIdleListener(mClusterManager);
-        this.googleMap.setOnMarkerClickListener(mClusterManager);
-        this.addFloodPointsToMap();
-        this.addChangeButtonHandler();
-        this.addMarkerInfoHandler();
+    private void initExistingMap()
+    {
+        try
+        {
+
+            this.googleMap.setMapType(selectedMapType);
+            this.initClusterManager();
+            this.addChangeButtonHandler();
+        }
+        catch(Exception e)
+        {
+            e.getStackTrace();
+        }
     }
 
     private void initClusterManager()
     {
-        this.mClusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap, new MarkerManager(googleMap)
+        MarkerManager markerManager = new MarkerManager(googleMap);
+        markerManager.newCollection("collection");
+
+        this.mClusterManager = new CustomClusterManager(getActivity().getApplicationContext(), googleMap, markerManager, omekaDataMap,  ((MainActivity) context).getSupportFragmentManager(), selectedMarkerTitle);
+        if(!(selectedMarkerTitle.equals("")))
         {
-            @Override
-            public boolean onMarkerClick(Marker marker)
-            {
-                myDest = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-                try
-                {
-                    if(selectedMarker != null)
-                    {
-                        selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                    }
-                    if(marker != null) //need to somehow check if its a marker or if its a cluster we are actually clicking...
-                    {
-                        myDest = marker.getPosition();
-                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                        selectedMarker = marker;
-                    }
-                }
-                catch (Exception e)
-                {
-                    //todo work on handling clicks both for cluster and indicating icon clicked, this is a temp fixish
-                    selectedMarker = null;
-                    e.getStackTrace();
-                }
-                // marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                return super.onMarkerClick(marker);
-            }
-        });
-        mClusterManager
-                .setOnClusterClickListener(new ClusterManager.OnClusterClickListener<CustomMapMarker>()
-                {
-                    @Override
-                    public boolean onClusterClick(final Cluster<CustomMapMarker> cluster)
-                    {
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                                cluster.getPosition(), (float) Math.floor(googleMap
-                                        .getCameraPosition().zoom + 1)), 300,
-                                null);
-                        return true;
-                    }
-                });
-
-        //this shouldnt be needed
-        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CustomMapMarker>() {
-            @Override
-            public boolean onClusterItemClick(CustomMapMarker customMapMarker)
-            {
-                //dest = new LatLng(customMapMarker.getPosition().latitude, customMapMarker.getPosition().longitude);
-                return false;
-            }
-        });
-
-        mClusterManager.setRenderer(new CustomClusterRenderer(getContext(), googleMap, mClusterManager)); //see CustomColorRender class for more, this is used to control cluster icon
-
-        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new MapPinInfoAdapter(LayoutInflater.from(getContext()), omekaDataItems));
-        googleMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
-    }
-
-    private void addFloodPointsToMap()
-    {
-        for (CustomMapMarker coord : omekaDataItems)
-        {
-            this.mClusterManager.addItem(coord);
+            mClusterManager.setTitle(selectedMarkerTitle);
+            handler.postDelayed(runnable, 200);
         }
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(AppConfiguration.MAP_STARTING_POINT ,AppConfiguration.MAP_STARTING_ZOOM)); //set initial map zoom and location
     }
 
     private void addChangeButtonHandler()
@@ -247,61 +217,35 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                 {
                     case GoogleMap.MAP_TYPE_NORMAL:
                         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                        selectedMapType = GoogleMap.MAP_TYPE_SATELLITE;
                         break;
                     case GoogleMap.MAP_TYPE_SATELLITE:
                         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                        selectedMapType = GoogleMap.MAP_TYPE_TERRAIN;
                         break;
                     case GoogleMap.MAP_TYPE_TERRAIN:
                         googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                        selectedMapType = GoogleMap.MAP_TYPE_HYBRID;
                         break;
                     default:
                         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        selectedMapType = GoogleMap.MAP_TYPE_NORMAL;
                 }
 
             }
         });
-    }
 
-    private void addMarkerInfoHandler()
-    {
-        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener()
-        {
-            @Override
-            public void onInfoWindowClick(Marker marker)
-            {
-
-                CustomMapMarker mapMarker = findMapMarker(marker);
-                Fragment fragment = StoryTabFragment.newInstance(mapMarker);
-                FragmentManager fm =  getActivity().getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frameLayout, fragment);
-                ft.commit();
-            }
-        });
-    }
-
-    private CustomMapMarker findMapMarker(Marker marker)
-    {
-        String title = marker.getTitle();
-        CustomMapMarker retMarker = null;
-        for(CustomMapMarker customMarker : omekaDataItems )
-        {
-            if(customMarker.getTitle().equalsIgnoreCase(title))
-            {
-                retMarker = customMarker;
-            }
-        }
-        return retMarker;
     }
 
    //below is for addying polyline routing via the button click...
+    //todo need to save mydest in clustermanager for rotations...
    private void buildRoute(String type)
    {
        this.setCurrentLocation();
 
-       if(myDest == null)
+       if(mClusterManager.getMyDest() == null)
        {
-           myDest  = AppConfiguration.MAP_STARTING_POINT;
+           mClusterManager.setMyDest(AppConfiguration.MAP_STARTING_POINT);
        }
 
        String url = AppConfiguration.URL_GOOGLE_MAPS_ROUTING;
@@ -313,7 +257,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
        RetrofitMapsRoute service = retrofit.create(RetrofitMapsRoute.class);
 
-       Call<RouteExample> call = service.getDistanceDuration(AppConfiguration.APP_LANGUAGE , origin.latitude + "," + origin.longitude, myDest.latitude + "," + myDest.longitude, type);
+       Call<RouteExample> call = service.getDistanceDuration(AppConfiguration.APP_LANGUAGE , origin.latitude + "," + origin.longitude, mClusterManager.getMyDest().latitude + "," + mClusterManager.getMyDest().longitude, type);
 
        call.enqueue(new Callback<RouteExample>()
        {
@@ -333,7 +277,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                    {
                        String distance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
                        String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
-                       ShowDistanceDuration.setText("Distance:" + distance + ", Duration:" + time);
+                       displayRouteToast(distance,time);
                        String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
                        List<LatLng> list = decodePoly(encodedString);
                        line = googleMap.addPolyline(new PolylineOptions()
@@ -358,6 +302,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
            }
        });
    }
+
+    private void displayRouteToast(String distance, String time)
+    {
+        Toast.makeText(getActivity(), "Distance: " + distance + ", Duration: " + time, Toast.LENGTH_LONG).show();
+    }
 
     private List<LatLng> decodePoly(String encoded)
     {
@@ -400,7 +349,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
     private void setCurrentLocation()
     {
-        this.location = this.googleMap.getMyLocation();
-        origin = new LatLng(location.getLatitude(),  location.getLongitude());
+        try
+        {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>()
+                    {
+                        @Override
+                        public void onSuccess(Location location)
+                        {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                origin = new LatLng(location.getLatitude(), location.getLongitude());
+                            }
+                        }
+                    });
+
+        }
+        catch (SecurityException e)
+        {
+            //todo handle this...it should be unreachable
+        }
     }
 }

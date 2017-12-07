@@ -2,8 +2,12 @@ package org.floodexplorer.floodexplorer.SupportingFiles;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.floodexplorer.floodexplorer.R;
 
 /**
  * Created by mgilge on 7/19/17.

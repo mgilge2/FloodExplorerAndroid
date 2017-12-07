@@ -5,7 +5,7 @@ package org.floodexplorer.floodexplorer.SupportingFiles;
  */
 
 
-import org.floodexplorer.floodexplorer.POJO.Route.RouteExample;
+import org.floodexplorer.floodexplorer.SupportingFiles.POJO.Route.RouteExample;
 
 import retrofit.Call;
 import retrofit.http.GET;
@@ -16,7 +16,7 @@ import retrofit.http.Query;
  */
 public interface RetrofitMapsRoute
 {
-    @GET("api/directions/json?key=AIzaSyC22GfkHu9FdgT9SwdCWMwKX1a4aohGifM")
+    @GET("api/directions/json?key=AIzaSyAOtM7z8SsRneqeap8xmbtT_Px5E2JQINI")
     Call<RouteExample> getDistanceDuration(@Query("units") String units, @Query("origin") String origin, @Query("destination") String destination, @Query("mode") String mode);
 }
 

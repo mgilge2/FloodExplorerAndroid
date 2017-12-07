@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.POJO.Nearest;
+package org.floodexplorer.floodexplorer.SupportingFiles.POJO.Nearest;
 
 /**
  * Created by mgilge on 7/20/17.

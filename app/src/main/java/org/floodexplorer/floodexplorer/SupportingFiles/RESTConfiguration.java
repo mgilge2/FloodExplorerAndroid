@@ -8,14 +8,6 @@ import java.security.PublicKey;
 
 public class RESTConfiguration
 {
-
-    /*
-    //Web addresses for REST
-    public static final String REST_URL_ITEMS = "http://floodexplorer.com/curatescape/api/items";
-    public static final String REST_URL_FILES = "http://floodexplorer.com/curatescape/api/files";
-    public static final String REST_URL_GEOLOC = "http://floodexplorer.com/curatescape/api/geolocations";
-    public static final String REST_SIMPLE_PAGES = "http://floodexplorer.com/curatescape/api/simple_pages";
-*/
     //Web addresses for REST
     public static final String REST_URL_ITEMS = "http://floodexplorer.org/api/items";
     public static final String REST_URL_FILES = "http://floodexplorer.org/api/files";

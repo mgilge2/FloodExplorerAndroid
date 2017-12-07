@@ -28,21 +28,17 @@ public class LoadingScreenFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_loading_screen, container, false);
         BottomNavigationView navigationView = (BottomNavigationView) view.findViewById(R.id.navigation);
         mBar= (ProgressBar) view.findViewById(R.id.progressBar2);
         this.customizeProgressBar();
-        //navigationView.setEnabled(false);
         return view;
     }
 
     private void customizeProgressBar()
     {
         //Customize the color of the progress bar
-        mBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
-
+        mBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), android.graphics.PorterDuff.Mode.MULTIPLY);
     }
 }

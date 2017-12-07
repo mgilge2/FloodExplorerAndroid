@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.POJO.Nearest;
+package org.floodexplorer.floodexplorer.SupportingFiles.POJO.Nearest;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

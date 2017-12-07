@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mgilge on 10/18/17.
@@ -23,6 +25,7 @@ public class CustomMarkerListBuilder
     private String omekaRestItemResults;
     private String omekaRestFilesResults;
     private ArrayList<CustomMapMarker> omekaDataItems;
+    private HashMap<String, CustomMapMarker> omekaDataMap;
 
     public  ArrayList<CustomMapMarker> buildOmekaDataItems(ArrayList<String> restResults)
     {
@@ -33,7 +36,17 @@ public class CustomMarkerListBuilder
         this.omekaDataItems = new ArrayList<CustomMapMarker>();
 
         this.parseRESTJsonResults();
+
+        this.buildMap();
+
         return omekaDataItems;
+    }
+
+    public HashMap<String, CustomMapMarker> buildOmekaDataMap(ArrayList<String> restResults)
+    {
+        this.omekaDataItems = this.buildOmekaDataItems(restResults);
+        this.buildMap();
+        return omekaDataMap;
     }
 
     public String parseRestSimplePages(String restResults)
@@ -48,9 +61,6 @@ public class CustomMarkerListBuilder
                 JSONObject object = jsonArray.getJSONObject(x);
                 results += object.getString(RESTConfiguration.TAG_TEXT);
             }
-            //replace all occurrences of one or more HTML tags with optional
-            // whitespace inbetween with a single space character
-            String strippedText = results.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
             Spanned htmlAsSpanned = Html.fromHtml(results); // used by TextView
             ret = htmlAsSpanned.toString();
         }
@@ -205,6 +215,16 @@ public class CustomMarkerListBuilder
         {
             StackTraceElement element = e.getStackTrace()[0];
             e.printStackTrace();
+        }
+    }
+
+    private void  buildMap()
+    {
+        this.omekaDataMap = new HashMap<String, CustomMapMarker>() ;
+
+        for(CustomMapMarker customMarker : omekaDataItems)
+        {
+            this.omekaDataMap.put(customMarker.getTitle(), customMarker);
         }
     }
 

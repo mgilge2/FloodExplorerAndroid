@@ -1,20 +1,27 @@
 package org.floodexplorer.floodexplorer.Activities;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
-import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
+import com.squareup.picasso.Picasso;
+
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.RecyclerAdapters.DividerItemDecoration;
+import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.RecyclerAdapters.StoryRecycler.StoryRecyclerAdapter;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
-import org.floodexplorer.floodexplorer.OmekaDataItems.Adapters.StoryListAdapter;
 import org.floodexplorer.floodexplorer.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -22,18 +29,11 @@ import java.util.ArrayList;
  */
 public class StoriesFragment extends Fragment
 {
-    private ListView storyListView;
+    private RecyclerView storyListView;
     private ArrayList<CustomMapMarker> omekaDataItems;
+    private int itemResource;
+    private HashMap<String, CustomMapMarker> omekaDataMap;
 
-    public static StoriesFragment newInstance(ArrayList<CustomMapMarker> omekaDataItems)
-    {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS, omekaDataItems);
-
-        StoriesFragment storiesFragment = new StoriesFragment();
-        storiesFragment.setArguments(bundle);
-        return storiesFragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -41,9 +41,10 @@ public class StoriesFragment extends Fragment
         View view = null;
         try
         {
-            readArgumentsBundle(getArguments());
             view = inflater.inflate(R.layout.fragment_stories, container, false);
-            this.storyListView = (ListView) view.findViewById(R.id.storyListView);
+            this.storyListView = (RecyclerView) view.findViewById(R.id.storyListView);
+            this.itemResource = R.layout.story_list_row;
+            this.omekaDataMap = MainActivity.getOmekaDataMap();
             this.populateListView();
             setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
 
@@ -55,24 +56,29 @@ public class StoriesFragment extends Fragment
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+    }
+
     //*******************************************************************
     //  Private Implementation Below Here....
     //
     //*******************************************************************
 
-    private void readArgumentsBundle(Bundle bundle)
-    {
-        if(bundle != null)
-        {
-            this.omekaDataItems = bundle.getParcelableArrayList(AppConfiguration.BUNDLE_TAG_OMEKA_DATA_ITEMS);
-        }
-    }
-
     private void populateListView()
     {
-        FragmentManager fragmentManager = getFragmentManager();
-        StoryListAdapter customMarkerAdapter = new StoryListAdapter(getContext(), omekaDataItems, fragmentManager);
-        storyListView.setAdapter(customMarkerAdapter);
-        this.storyListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.divider2);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_list_from_right);
+
+        StoryRecyclerAdapter storyRecyclerAdapter = new StoryRecyclerAdapter(getContext(), omekaDataMap, itemResource);
+
+        storyListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        storyListView.addItemDecoration(dividerItemDecoration);
+
+        storyListView.setLayoutAnimation(animation);
+        this.storyListView.setAdapter(storyRecyclerAdapter);
     }
 }

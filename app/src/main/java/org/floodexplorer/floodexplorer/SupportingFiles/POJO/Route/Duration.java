@@ -1,4 +1,4 @@
-package org.floodexplorer.floodexplorer.POJO.Route;
+package org.floodexplorer.floodexplorer.SupportingFiles.POJO.Route;
 /*
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
