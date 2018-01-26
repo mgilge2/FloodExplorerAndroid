@@ -27,6 +27,7 @@ import mehdi.sakout.aboutpage.Element;
 
 /**
  * Created by mgilge on 11/21/17.
+ * controls the about page
  */
 
 public class AboutDialog extends DialogFragment
