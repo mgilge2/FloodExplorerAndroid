@@ -42,15 +42,10 @@ public class HomeFragment extends Fragment
     {
         this.readArgumentsBundle(getArguments());
 
-        //older phones have issues with more images being loaded into the carousel....
-        if(Build.VERSION.SDK_INT< 21)
-        {
-            sampleImages = new int[] {R.drawable.home1, R.drawable.home2, R.drawable.home3, R.drawable.home4};
-        }
-        else
-        {
-            sampleImages = new int[] {R.drawable.home1, R.drawable.home2, R.drawable.home3, R.drawable.home4, R.drawable.home5, R.drawable.home6, R.drawable.home7, R.drawable.home8, R.drawable.home9, R.drawable.home10};
-        }
+        //some phones have issues with more images being loaded into the carousel....keep under a meg of images if at all possible
+
+        sampleImages = new int[] {R.drawable.home1, R.drawable.home2, R.drawable.home3, R.drawable.home4, R.drawable.home5, R.drawable.home6, R.drawable.home7, R.drawable.home8, R.drawable.home9, R.drawable.home10};
+
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         this.textView = (TextView) view.findViewById(R.id.homeTxtView);
