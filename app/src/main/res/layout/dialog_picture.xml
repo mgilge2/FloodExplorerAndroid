@@ -1,59 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtImageTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
-        android:text="TextView" />
-
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
+    <TableRow
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/txtImageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/dismissBtn"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/dismissBtn"
+                android:layout_toStartOf="@+id/dismissBtn"
+                android:foregroundGravity="left"
+                android:gravity="left"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/dismissBtn"
+                style="@android:style/Widget.Holo.ImageButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/black"
+                android:foregroundGravity="right"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                app:srcCompat="@drawable/closeicon" />
+        </RelativeLayout>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <org.floodexplorer.floodexplorer.SupportingFiles.TouchImageView
+                android:id="@+id/dialogImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/logomenu" />
 
-                <ImageView
-                    android:id="@+id/dialogImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    app:srcCompat="@drawable/logomenu" />
-            </RelativeLayout>
-        </ScrollView>
-    </HorizontalScrollView>
+            <ProgressBar
+                android:id="@+id/picassoProg"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:elevation="0dp" />
 
+        </RelativeLayout>
 
+    </TableRow>
 
-    <TextView
-        android:id="@+id/txtImageCaption"
+    <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/dismissBtn"
-        android:layout_alignLeft="@+id/txtImageTitle"
-        android:layout_alignStart="@+id/txtImageTitle" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/dismissBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="Close" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/txtImageCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="TextView"
+            android:textColor="@android:color/white" />
+
+    </TableRow>
+
+
+</TableLayout>
