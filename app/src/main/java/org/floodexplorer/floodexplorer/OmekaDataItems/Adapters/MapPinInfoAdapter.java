@@ -1,6 +1,5 @@
 package org.floodexplorer.floodexplorer.OmekaDataItems.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,14 +21,14 @@ import java.util.Map;
 
 public class MapPinInfoAdapter implements GoogleMap.InfoWindowAdapter
 {
-    private final LayoutInflater mInflater;
+    private final LayoutInflater inflater;
     private CustomMapMarker customMapMarker;
     private HashMap<String, CustomMapMarker> omekaDataMap;
 
 
     public MapPinInfoAdapter(LayoutInflater inflater)
     {
-        this.mInflater = inflater;
+        this.inflater = inflater;
     }
 
     public MapPinInfoAdapter(LayoutInflater inflater, HashMap<String, CustomMapMarker> omekaDataMap)
@@ -48,7 +46,7 @@ public class MapPinInfoAdapter implements GoogleMap.InfoWindowAdapter
     @Override
     public View getInfoWindow(Marker marker)
     {
-        View popup = mInflater.inflate(R.layout.pin_info_layout, null);
+        View popup = inflater.inflate(R.layout.pin_info_layout, null);
         ImageView imageView = (ImageView) popup.findViewById(R.id.pinImageView);
         ((TextView) popup.findViewById(R.id.title)).setText(marker.getTitle());
         ((TextView) popup.findViewById(R.id.authorTxt)).setText("by: " + marker.getSnippet());
@@ -74,7 +72,7 @@ public class MapPinInfoAdapter implements GoogleMap.InfoWindowAdapter
     @Override
     public View getInfoContents(Marker marker)
     {
-        View popup = mInflater.inflate(R.layout.pin_info_layout, null);
+        View popup = inflater.inflate(R.layout.pin_info_layout, null);
         ImageView imageView = (ImageView) popup.findViewById(R.id.pinImageView);
         ((TextView) popup.findViewById(R.id.title)).setText(marker.getTitle());
         ((TextView) popup.findViewById(R.id.authorTxt)).setText("by: " + marker.getSnippet());

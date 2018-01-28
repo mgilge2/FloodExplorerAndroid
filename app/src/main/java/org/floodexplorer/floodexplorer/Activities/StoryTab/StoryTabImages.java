@@ -36,10 +36,10 @@ public class StoryTabImages extends Fragment
     {
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConfiguration.BUNDLE_TAG_CUSTOM_MAP_MARKER, marker);
-        StoryTabImages storyImagesList = new StoryTabImages();
-        storyImagesList.setArguments(bundle);
+        StoryTabImages storyTabImages = new StoryTabImages();
+        storyTabImages.setArguments(bundle);
 
-        return storyImagesList;
+        return storyTabImages;
     }
 
     @Override
@@ -49,7 +49,6 @@ public class StoryTabImages extends Fragment
         View view = inflater.inflate(R.layout.fragment_story_images_list, container, false);
         this.storyImagesList = (RecyclerView) view.findViewById(R.id.storyImagesList);
 
-        //this.populateRecyclerView();
         setRetainInstance(true); //this is why rotation is currently working it might not be the best way to do this
         return view;
     }

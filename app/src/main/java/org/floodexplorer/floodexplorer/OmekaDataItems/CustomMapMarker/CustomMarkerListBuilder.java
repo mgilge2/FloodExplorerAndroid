@@ -1,7 +1,8 @@
-package org.floodexplorer.floodexplorer.OmekaDataItems;
+package org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker;
 
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.StoryItemDetails;
@@ -16,7 +17,8 @@ import java.util.Map;
 /**
  * Created by mgilge on 10/18/17.
  * This should be thought of as the builder for my custom data class as the clustering markers built for this app will work for anything
- * with similar data and is not specific to Omeka itself...
+ * with similar data and is not specific to Omeka itself.  This class should be rewritten once a better api for REST is made as we are using standard
+ * Omeka rest api which isnt well formed
  */
 
 public class CustomMarkerListBuilder
@@ -66,8 +68,7 @@ public class CustomMarkerListBuilder
         }
         catch (Exception e)
         {
-            StackTraceElement element = e.getStackTrace()[0];
-            e.printStackTrace();
+            Log.e("CustomMarkerListBuilder", e.getMessage());
         }
         return ret;
     }
@@ -88,8 +89,7 @@ public class CustomMarkerListBuilder
         }
         catch (Exception e)
         {
-            //toDo handle this if it occurs...
-            e.printStackTrace();
+            Log.e("CustomMarkerListBuilder", e.getMessage());
         }
     }
 
@@ -164,8 +164,7 @@ public class CustomMarkerListBuilder
         }
         catch (Exception e)
         {
-            //// TODO: 10/15/17 need to handle this if it happens.....
-            e.printStackTrace();
+            Log.e("CustomMarkerListBuilder", e.getMessage());
         }
     }
 
@@ -213,8 +212,7 @@ public class CustomMarkerListBuilder
         }
         catch (Exception e)
         {
-            StackTraceElement element = e.getStackTrace()[0];
-            e.printStackTrace();
+            Log.e("CustomMarkerListBuilder", e.getMessage());
         }
     }
 
@@ -228,6 +226,7 @@ public class CustomMarkerListBuilder
         }
     }
 
+    //Eventually want to move this to a factory class to generate story items other than images, but only images were available at the time this was written
     private boolean fileExcluder(String fileName)
     {
         boolean ret = false;

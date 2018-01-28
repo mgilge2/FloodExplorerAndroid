@@ -17,7 +17,7 @@ import org.floodexplorer.floodexplorer.R;
 
 public class LoadingScreenFragment extends Fragment
 {
-    private ProgressBar mBar;
+    private ProgressBar progressBar;
 
     public static LoadingScreenFragment newInstance()
     {
@@ -31,7 +31,7 @@ public class LoadingScreenFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_loading_screen, container, false);
         BottomNavigationView navigationView = (BottomNavigationView) view.findViewById(R.id.navigation);
-        mBar= (ProgressBar) view.findViewById(R.id.progressBar2);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         this.customizeProgressBar();
         return view;
     }
@@ -39,6 +39,6 @@ public class LoadingScreenFragment extends Fragment
     private void customizeProgressBar()
     {
         //Customize the color of the progress bar
-        mBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), android.graphics.PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), android.graphics.PorterDuff.Mode.MULTIPLY);
     }
 }

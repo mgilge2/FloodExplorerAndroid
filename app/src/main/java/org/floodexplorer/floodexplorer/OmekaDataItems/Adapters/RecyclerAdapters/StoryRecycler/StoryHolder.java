@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,11 +49,9 @@ public class StoryHolder extends RecyclerView.ViewHolder implements View.OnClick
         storyLabel.setText(marker.getTitle());
         TextViewCompat.setAutoSizeTextTypeWithDefaults(storyLabel, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         TextViewCompat.setAutoSizeTextTypeWithDefaults(storyAuthorLabel, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        // TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(storyLabel, 10, 30, 2,1);
         this.customMapMarker = marker;
         String url = marker.getStoryImgageUrl();
         this.loadBitmapPicasso(imageView,url);
-        //this.loadBitmapGlide(imageView, url);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class StoryHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
         catch (Exception e)
         {
-            e.getStackTrace();
+            Log.e("StoryHolder", e.getMessage());
         }
     }
 
@@ -107,7 +106,7 @@ public class StoryHolder extends RecyclerView.ViewHolder implements View.OnClick
             }
             catch (Exception e)
             {
-                e.getStackTrace();
+                Log.e("StoryHolder", e.getMessage());
             }
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -126,7 +127,6 @@ public class CustomClusterManager<ClusterItem> extends ClusterManager implements
         this.googleMap.setOnCameraIdleListener(this);
         this.googleMap.setOnMarkerClickListener(this);
 
-
         UiSettings uiSettings = this.googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true); //adds zoom buttons on map
         uiSettings.setMapToolbarEnabled(true);
@@ -137,7 +137,7 @@ public class CustomClusterManager<ClusterItem> extends ClusterManager implements
         }
         catch (SecurityException e)
         {
-            //todo user didnt enable permissions so this feature isnt available....
+            Log.e("CustomClusterManager", e.getMessage());
         }
     }
 
@@ -265,7 +265,7 @@ public class CustomClusterManager<ClusterItem> extends ClusterManager implements
                 }
                 catch (Exception e)
                 {
-                    e.getStackTrace();
+                    Log.e("CustomClusterManager", e.getMessage());
                 }
             }
         };

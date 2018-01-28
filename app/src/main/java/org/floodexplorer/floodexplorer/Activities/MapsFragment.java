@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -52,7 +51,7 @@ import retrofit.Retrofit;
 public class MapsFragment extends Fragment implements OnMapReadyCallback
 {
     private GoogleMap googleMap;
-    private CustomClusterManager<CustomMapMarker> mClusterManager;
+    private CustomClusterManager<CustomMapMarker> clusterManager;
     private Button changeButton;
     private Button routeButton;
     private LatLng origin;
@@ -64,7 +63,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     private  HashMap<String, CustomMapMarker> omekaDataMap;
     private Runnable runnable;
     private Handler handler;
-    private FusedLocationProviderClient mFusedLocationClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
 
     @Override
@@ -78,7 +77,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         {
             public void run()
             {
-                mClusterManager.displaySelectedMarkerWindow(selectedMarkerTitle);
+                clusterManager.displaySelectedMarkerWindow(selectedMarkerTitle);
             }
         };
 
@@ -86,33 +85,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         myMAPF.getMapAsync(this);
 
         this.context = view.getContext();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         this.setCurrentLocation();
         this.changeButton = (Button) view.findViewById(R.id.btnChangeMap);
         this.routeButton = (Button) view.findViewById(R.id.btnDriveWalk);
         this.omekaDataMap = MainActivity.getOmekaDataMap();
-        routeButton.setOnClickListener(new View.OnClickListener()
-        {
-                @Override
-                public void onClick(View v)
-                {
-                    if(origin != null)
-                    {
-                        Button button = (Button) v;
-                        switch (button.getText().toString())
-                        {
-                            case "Driving":
-                                buildRoute("driving");
-                                button.setText("Walking");
-                                break;
-                            case "Walking":
-                                buildRoute("walking");
-                                button.setText("Driving");
-                                break;
-                        }
-                    }
-                }
-            });
+        this.addRouteButtonHandler();
+
         return view;
     }
 
@@ -133,7 +112,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     }
 
 
-    //Below two methods have to do with saving the selected tab when rotating...
+    //Below two methods have to do with saving the map state when rotating...
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
@@ -153,9 +132,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         savedInstanceState.putBoolean("firstRun", firstRun);
         savedInstanceState.putInt("selectedMapType", selectedMapType);
 
-        if(mClusterManager.getSelectedMarker() != null)
+        if(clusterManager.getSelectedMarker() != null)
         {
-            savedInstanceState.putString("selectedMarkerTitle", this.mClusterManager.getSelectedMarker().getTitle());
+            savedInstanceState.putString("selectedMarkerTitle", this.clusterManager.getSelectedMarker().getTitle());
         }
         else
         {
@@ -189,7 +168,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         }
         catch(Exception e)
         {
-            e.getStackTrace();
+            Log.e("MapsFragment", e.getMessage());
         }
     }
 
@@ -198,10 +177,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         MarkerManager markerManager = new MarkerManager(googleMap);
         markerManager.newCollection("collection");
 
-        this.mClusterManager = new CustomClusterManager(getActivity().getApplicationContext(), googleMap, markerManager, omekaDataMap,  ((MainActivity) context).getSupportFragmentManager(), selectedMarkerTitle);
+        this.clusterManager = new CustomClusterManager(getActivity().getApplicationContext(), googleMap, markerManager, omekaDataMap,  ((MainActivity) context).getSupportFragmentManager(), selectedMarkerTitle);
         if(!(selectedMarkerTitle.equals("")))
         {
-            mClusterManager.setTitle(selectedMarkerTitle);
+            clusterManager.setTitle(selectedMarkerTitle);
             handler.postDelayed(runnable, 200);
         }
     }
@@ -234,18 +213,43 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
             }
         });
+    }
 
+    private void addRouteButtonHandler()
+    {
+        routeButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(origin != null)
+                {
+                    Button button = (Button) v;
+                    switch (button.getText().toString())
+                    {
+                        case "Driving":
+                            buildRoute("driving");
+                            button.setText("Walking");
+                            break;
+                        case "Walking":
+                            buildRoute("walking");
+                            button.setText("Driving");
+                            break;
+                    }
+                }
+            }
+        });
     }
 
    //below is for addying polyline routing via the button click...
-    //todo need to save mydest in clustermanager for rotations...
+
    private void buildRoute(String type)
    {
        this.setCurrentLocation();
 
-       if(mClusterManager.getMyDest() == null)
+       if(clusterManager.getMyDest() == null)
        {
-           mClusterManager.setMyDest(AppConfiguration.MAP_STARTING_POINT);
+           clusterManager.setMyDest(AppConfiguration.MAP_STARTING_POINT);
        }
 
        String url = AppConfiguration.URL_GOOGLE_MAPS_ROUTING;
@@ -257,7 +261,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
        RetrofitMapsRoute service = retrofit.create(RetrofitMapsRoute.class);
 
-       Call<RouteExample> call = service.getDistanceDuration(AppConfiguration.APP_LANGUAGE , origin.latitude + "," + origin.longitude, mClusterManager.getMyDest().latitude + "," + mClusterManager.getMyDest().longitude, type);
+       Call<RouteExample> call = service.getDistanceDuration(AppConfiguration.APP_LANGUAGE , origin.latitude + "," + origin.longitude, clusterManager.getMyDest().latitude + "," + clusterManager.getMyDest().longitude, type);
 
        call.enqueue(new Callback<RouteExample>()
        {
@@ -290,8 +294,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                }
                catch (Exception e)
                {
-                   Log.d("onResponse", "There is an error");
-                   e.printStackTrace();
+                   Log.e("MapsFragment", e.getMessage());
                }
            }
 
@@ -351,7 +354,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     {
         try
         {
-            mFusedLocationClient.getLastLocation()
+            fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(new OnSuccessListener<Location>()
                     {
                         @Override
@@ -367,7 +370,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         }
         catch (SecurityException e)
         {
-            //todo handle this...it should be unreachable
+            Log.e("MapsFragment", e.getMessage());
         }
     }
 }

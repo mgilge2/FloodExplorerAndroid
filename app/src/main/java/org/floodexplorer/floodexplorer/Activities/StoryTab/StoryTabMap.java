@@ -3,6 +3,7 @@ package org.floodexplorer.floodexplorer.Activities.StoryTab;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +80,8 @@ public class StoryTabMap extends Fragment implements OnMapReadyCallback
         }
         catch (SecurityException e)
         {
-            //todo deal with this if it occurs...
+            Log.e("StoryTabMap", e.getMessage());
         }
-
 
         //set the map to what the initial settings for FloodExplorer.org are, this should be placed in a settings file at the least not hardcoded here...
         googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(customMapMarker.getPosition() , ((float) customMapMarker.getZoom())) ); //set initial map zoom and location
