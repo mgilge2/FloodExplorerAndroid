@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment
         this.readArgumentsBundle(getArguments());
 
         //some phones have issues with more images being loaded into the carousel....keep under a meg of images if at all possible
-
         sampleImages = new int[] {R.drawable.home1, R.drawable.home2, R.drawable.home3, R.drawable.home4, R.drawable.home5, R.drawable.home6, R.drawable.home7, R.drawable.home8, R.drawable.home9, R.drawable.home10};
 
 

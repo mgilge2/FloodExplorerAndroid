@@ -39,7 +39,6 @@ public class StoryItemRecycler extends RecyclerView.Adapter<StoryItemHolder> imp
         this.selectedStoryTitle = selectedStoryTitle;
     }
 
-    //the below method ideally should be in the itemdetails only....
     public void launchImageDialog()
     {
         try
@@ -61,11 +60,6 @@ public class StoryItemRecycler extends RecyclerView.Adapter<StoryItemHolder> imp
         this.context = context;
         this.storyItemDetails = storyItemDetails;
         this.itemResource = itemResource;
-    }
-
-    public int getSelectedStoryItem()
-    {
-        return selectedStoryItem;
     }
 
     public void setSelectedStoryItem(int selectedStoryItem)

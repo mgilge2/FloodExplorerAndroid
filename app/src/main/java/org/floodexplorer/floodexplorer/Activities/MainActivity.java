@@ -19,25 +19,19 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMapMarker;
 import org.floodexplorer.floodexplorer.SupportingFiles.AppConfiguration;
-import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMarkerListBuilder;
+import org.floodexplorer.floodexplorer.OmekaDataItems.CustomMapMarker.CustomMarkerListBuilder;
 import org.floodexplorer.floodexplorer.SupportingFiles.OmekaRestLoader;
 import org.floodexplorer.floodexplorer.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
-import mehdi.sakout.aboutpage.AboutPage;
 
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<String>>
@@ -78,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         catch (Exception e)
         {
-            StackTraceElement element = e.getStackTrace()[0];
-            e.printStackTrace();
+            Log.e("MainActivity", e.getMessage());
         }
         super.onPause();
     }
@@ -165,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         catch (Exception e)
         {
-            e.getStackTrace();
+            Log.e("MainActivity", e.getMessage());
         }
     }
 
@@ -256,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         transaction.commitAllowingStateLoss();
     }
 
-    //ADDED PERMISSIONS BY TEJ IN CASE NEED TO CHANGE
+    //Add Permisions
 
     private void noInternetDialog()
     {
@@ -330,6 +323,4 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }
     }
-
-    //END PERMISSIONS BY TEJ IN CASE NEED TO CHANGE
 }

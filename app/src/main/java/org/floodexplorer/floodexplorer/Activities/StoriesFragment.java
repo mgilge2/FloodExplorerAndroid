@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +31,8 @@ import java.util.HashMap;
 public class StoriesFragment extends Fragment
 {
     private RecyclerView storyListView;
-    private ArrayList<CustomMapMarker> omekaDataItems;
     private int itemResource;
     private HashMap<String, CustomMapMarker> omekaDataMap;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -51,7 +50,7 @@ public class StoriesFragment extends Fragment
         }
         catch (Exception e)
         {
-            e.getStackTrace();
+            Log.e("StoriesFragment", e.getMessage());
         }
         return view;
     }
@@ -79,6 +78,6 @@ public class StoriesFragment extends Fragment
         storyListView.addItemDecoration(dividerItemDecoration);
 
         storyListView.setLayoutAnimation(animation);
-        this.storyListView.setAdapter(storyRecyclerAdapter);
+        storyListView.setAdapter(storyRecyclerAdapter);
     }
 }

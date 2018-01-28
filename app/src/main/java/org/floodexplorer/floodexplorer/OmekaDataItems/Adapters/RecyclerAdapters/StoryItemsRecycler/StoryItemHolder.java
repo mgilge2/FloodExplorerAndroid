@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -67,8 +68,8 @@ public class StoryItemHolder extends RecyclerView.ViewHolder implements View.OnC
         }
         catch (Exception e)
         {
-            e.getStackTrace();
-            String s = "";
+            Log.e("StoryItemHolder", e.getMessage());
+
         }
     }
 
@@ -108,7 +109,7 @@ public class StoryItemHolder extends RecyclerView.ViewHolder implements View.OnC
             }
             catch (Exception e)
             {
-                e.getStackTrace();
+                Log.e("StoryItemHolder", e.getMessage());
             }
         }
     }

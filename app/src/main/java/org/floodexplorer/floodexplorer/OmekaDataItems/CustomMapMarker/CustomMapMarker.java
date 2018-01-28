@@ -20,9 +20,9 @@ import java.util.ArrayList;
 
 public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
 {
-    private LatLng mPosition;
-    private String mTitle;
-    private String mSnippet;
+    private LatLng position;
+    private String title;
+    private String snippet;
     private String storyText;
     private double zoom;
     private ArrayList<StoryItemDetails> fileList;  //see note in StoryItemDetails about making this abstract to increase file type handling....
@@ -32,25 +32,21 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
     public CustomMapMarker(double lat, double lng)
     {
         super();
-        this.mPosition = new LatLng(lat, lng);
+        this.position = new LatLng(lat, lng);
         this.fileList = new ArrayList<StoryItemDetails>();
     }
 
     public CustomMapMarker(double lat, double lng, String title, String snippet)
     {
-
-        this.mPosition = new LatLng(lat, lng);
-        this.mTitle = title;
-        this.mSnippet = snippet; //disabling snippet = ""
+        this(lat, lng);
+        this.title = title;
+        this.snippet = snippet;
         this.fileList = new ArrayList<StoryItemDetails>();
     }
 
     public CustomMapMarker(double lat, double lng, String title, String snippet, double zoom, String storyText, int id, String storyResources)
     {
-
-        this.mPosition = new LatLng(lat, lng);
-        this.mTitle = title;
-        this.mSnippet = snippet; //disabling snippet = ""
+        this(lat, lng, title, snippet);
         this.storyText = storyText;
         this.zoom = zoom;
         this.fileList = new ArrayList<StoryItemDetails>();
@@ -61,9 +57,9 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
     public CustomMapMarker(Parcel parcel)
     {
         LatLng latLng = new LatLng(parcel.readDouble(), parcel.readDouble());
-        this.mPosition = latLng;
-        this.mTitle = parcel.readString();
-        this.mSnippet = parcel.readString();
+        this.position = latLng;
+        this.title = parcel.readString();
+        this.snippet = parcel.readString();
         this.storyText = parcel.readString();
         this.zoom = parcel.readDouble();
         this.fileList = parcel.readArrayList(ClassLoader.getSystemClassLoader());
@@ -91,19 +87,19 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
     @Override
     public LatLng getPosition()
     {
-        return this.mPosition;
+        return this.position;
     }
 
     @Override
     public String getTitle()
     {
-        return this.mTitle;
+        return this.title;
     }
 
     @Override
     public String getSnippet()
     {
-        return this.mSnippet;
+        return this.snippet;
     }
 
     public double getZoom() {
@@ -150,10 +146,10 @@ public class CustomMapMarker implements ClusterItem, Parcelable, Serializable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeDouble(mPosition.longitude);
-        dest.writeDouble(mPosition.latitude);
-        dest.writeString(mTitle);
-        dest.writeString(mSnippet);
+        dest.writeDouble(position.longitude);
+        dest.writeDouble(position.latitude);
+        dest.writeString(title);
+        dest.writeString(snippet);
         dest.writeString(storyText);
         dest.writeDouble(zoom);
         dest.writeList(fileList);
